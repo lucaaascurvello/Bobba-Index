@@ -5,7 +5,7 @@ import type { ApiResult, HabboErrorInfo } from "./types";
 
 export class HabboError extends Error {
   kind: HabboErrorInfo["kind"];
-  status?: number;
+  status?: number | undefined;
   constructor(info: HabboErrorInfo) {
     super(info.message);
     this.kind = info.kind;
