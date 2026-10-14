@@ -25,11 +25,11 @@ export function StatePanel({
   action,
   className,
 }: {
-  icon?: LucideIcon;
+  icon?: LucideIcon | undefined;
   title: string;
-  description?: ReactNode;
-  action?: ReactNode;
-  className?: string;
+  description?: ReactNode | undefined;
+  action?: ReactNode | undefined;
+  className?: string | undefined;
 }) {
   return (
     <div className={cn("flex flex-col items-center rounded-xl border border-dashed border-border bg-surface/50 px-6 py-12 text-center", className)} role="status">
@@ -43,7 +43,7 @@ export function StatePanel({
   );
 }
 
-export function ErrorPanel({ error, onRetry, className }: { error: unknown; onRetry?: () => void; className?: string }) {
+export function ErrorPanel({ error, onRetry, className }: { error: unknown; onRetry?: (() => void) | undefined; className?: string | undefined }) {
   const kind: HabboErrorKind = error instanceof HabboError ? error.kind : "network";
   const meta = META[kind];
   const message = error instanceof Error ? error.message : "Erro inesperado.";

@@ -14,7 +14,7 @@ export type HabboErrorKind =
 export interface HabboErrorInfo {
   kind: HabboErrorKind;
   message: string;
-  status?: number;
+  status?: number | undefined;
 }
 
 export type ApiResult<T> = { ok: true; data: T } | { ok: false; error: HabboErrorInfo };

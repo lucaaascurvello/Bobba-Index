@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 /** Original Bobba Index mark: a pixel "B" inside an index card shape. */
 export function LogoMark({ className }: { className?: string }) {
-  const px = [
+  const px: [number, number][] = [
     [0, 0], [1, 0], [2, 0],
     [0, 1], [3, 1],
     [0, 2], [1, 2], [2, 2],

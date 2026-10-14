@@ -122,7 +122,7 @@ function HeaderSkeleton() {
   return <div className="h-[214px] animate-pulse rounded-2xl border border-border bg-card" aria-label="Carregando perfil" />;
 }
 
-function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser; profile?: HabboProfile; loading: boolean; error: unknown; retry: () => void }) {
+function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser; profile: HabboProfile | undefined; loading: boolean; error: unknown; retry: () => void }) {
   const section = (render: (p: HabboProfile) => ReactNode) => {
     if (!user.profileVisible || (error instanceof HabboError && error.kind === "private"))
       return <StatePanel icon={Lock} title="Perfil privado" description="Este jogador ocultou o perfil. A API pública não fornece estes dados." />;

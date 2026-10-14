@@ -30,7 +30,7 @@ export function normalizeName(raw: string): ApiResult<string> {
 }
 
 function fail(kind: HabboErrorInfo["kind"], message: string, status?: number): { ok: false; error: HabboErrorInfo } {
-  return { ok: false, error: { kind, message, status } };
+  return { ok: false, error: status === undefined ? { kind, message } : { kind, message, status } };
 }
 
 async function getJson(url: string): Promise<ApiResult<unknown>> {
@@ -61,57 +61,57 @@ function hotelBase(hotel: string): ApiResult<string> {
 }
 
 function mapBadge(b: Record<string, unknown>): HabboBadge {
-  return { code: String(b.code ?? ""), name: str(b.name), description: str(b.description) };
+  return { code: String(b["code"] ?? ""), name: str(b["name"]), description: str(b["description"]) };
 }
 
 export function mapUser(hotel: HotelId, u: Record<string, unknown>): HabboUser {
   return {
     hotel,
-    uniqueId: String(u.uniqueId ?? ""),
-    name: String(u.name ?? ""),
-    figureString: str(u.figureString),
-    motto: str(u.motto),
-    online: bool(u.online),
-    lastAccessTime: str(u.lastAccessTime),
-    memberSince: str(u.memberSince),
-    profileVisible: u.profileVisible !== false,
-    currentLevel: num(u.currentLevel),
-    currentLevelCompletePercent: num(u.currentLevelCompletePercent),
-    totalExperience: num(u.totalExperience),
-    starGemCount: num(u.starGemCount),
-    selectedBadges: arr(u.selectedBadges)
-      .map((b) => ({ ...mapBadge(b), badgeIndex: num(b.badgeIndex) }))
-      .filter((b) => b.code),
+    uniqueId: String(u["uniqueId"] ?? ""),
+    name: String(u["name"] ?? ""),
+    figureString: str(u["figureString"]),
+    motto: str(u["motto"]),
+    online: bool(u["online"]),
+    lastAccessTime: str(u["lastAccessTime"]),
+    memberSince: str(u["memberSince"]),
+    profileVisible: u["profileVisible"] !== false,
+    currentLevel: num(u["currentLevel"]),
+    currentLevelCompletePercent: num(u["currentLevelCompletePercent"]),
+    totalExperience: num(u["totalExperience"]),
+    starGemCount: num(u["starGemCount"]),
+    selectedBadges: arr(u["selectedBadges"])
+      .map((b) => ({ ...mapBadge(b), badgeIndex: num(b["badgeIndex"]) }))
+      .filter((b) => b["code"]),
   };
 }
 
 const mapGroup = (g: Record<string, unknown>): HabboGroup => ({
-  id: String(g.id ?? ""),
-  name: String(g.name ?? "Grupo sem nome"),
-  description: str(g.description),
-  type: str(g.type),
-  badgeCode: str(g.badgeCode),
-  roomId: str(g.roomId),
-  isAdmin: bool(g.isAdmin),
+  id: String(g["id"] ?? ""),
+  name: String(g["name"] ?? "Grupo sem nome"),
+  description: str(g["description"]),
+  type: str(g["type"]),
+  badgeCode: str(g["badgeCode"]),
+  roomId: str(g["roomId"]),
+  isAdmin: bool(g["isAdmin"]),
 });
 
 const mapRoom = (r: Record<string, unknown>): HabboRoom => ({
-  id: (r.id as number | string) ?? String(r.uniqueId ?? ""),
-  name: String(r.name ?? "Quarto sem nome"),
-  description: str(r.description),
-  creationTime: str(r.creationTime),
-  tags: Array.isArray(r.tags) ? r.tags.filter((t): t is string => typeof t === "string") : [],
-  maximumVisitors: num(r.maximumVisitors),
-  rating: num(r.rating),
-  thumbnailUrl: str(r.thumbnailUrl),
-  imageUrl: str(r.imageUrl),
+  id: (r["id"] as number | string) ?? String(r["uniqueId"] ?? ""),
+  name: String(r["name"] ?? "Quarto sem nome"),
+  description: str(r["description"]),
+  creationTime: str(r["creationTime"]),
+  tags: Array.isArray(r["tags"]) ? r["tags"].filter((t): t is string => typeof t === "string") : [],
+  maximumVisitors: num(r["maximumVisitors"]),
+  rating: num(r["rating"]),
+  thumbnailUrl: str(r["thumbnailUrl"]),
+  imageUrl: str(r["imageUrl"]),
 });
 
 const mapFriend = (f: Record<string, unknown>): HabboFriend => ({
-  uniqueId: String(f.uniqueId ?? ""),
-  name: String(f.name ?? ""),
-  motto: str(f.motto),
-  figureString: str(f.figureString),
+  uniqueId: String(f["uniqueId"] ?? ""),
+  name: String(f["name"] ?? ""),
+  motto: str(f["motto"]),
+  figureString: str(f["figureString"]),
 });
 
 /** GET /api/public/users?name= — exact (case-insensitive) nick lookup. */
@@ -126,7 +126,7 @@ export async function fetchUserByName(hotel: string, rawName: string): Promise<A
     return r;
   }
   const body = r.data as Record<string, unknown>;
-  if (!body || typeof body !== "object" || !body.uniqueId) return fail("not_found", "Jogador não encontrado.");
+  if (!body || typeof body !== "object" || !body["uniqueId"]) return fail("not_found", "Jogador não encontrado.");
   return { ok: true, data: mapUser(hotel as HotelId, body) };
 }
 
@@ -144,11 +144,11 @@ export async function fetchProfile(hotel: string, uniqueId: string): Promise<Api
   return {
     ok: true,
     data: {
-      user: mapUser(hotel as HotelId, (p.user as Record<string, unknown>) ?? {}),
-      badges: Array.isArray(p.badges) ? arr(p.badges).map(mapBadge).filter((b) => b.code) : null,
-      groups: Array.isArray(p.groups) ? arr(p.groups).map(mapGroup) : null,
-      rooms: Array.isArray(p.rooms) ? arr(p.rooms).map(mapRoom) : null,
-      friends: Array.isArray(p.friends) ? arr(p.friends).map(mapFriend) : null,
+      user: mapUser(hotel as HotelId, (p["user"] as Record<string, unknown>) ?? {}),
+      badges: Array.isArray(p["badges"]) ? arr(p["badges"]).map(mapBadge).filter((b) => b["code"]) : null,
+      groups: Array.isArray(p["groups"]) ? arr(p["groups"]).map(mapGroup) : null,
+      rooms: Array.isArray(p["rooms"]) ? arr(p["rooms"]).map(mapRoom) : null,
+      friends: Array.isArray(p["friends"]) ? arr(p["friends"]).map(mapFriend) : null,
     },
   };
 }
@@ -173,7 +173,7 @@ export function parseBadgeTexts(text: string): CatalogBadge[] {
   }
   return [...names.entries()]
     .map(([code, name]) => ({ code, name: name || null, description: descs.get(code) || null }))
-    .sort((a, b) => a.code.localeCompare(b.code));
+    .sort((a, b) => a.code.localeCompare(b["code"]));
 }
 
 const catalogCache = new Map<string, { at: number; items: CatalogBadge[] }>();
@@ -208,11 +208,11 @@ export async function searchBadgeCatalog(
   if (!cat.ok) return cat;
   const q = opts.q.trim().toLowerCase();
   const filtered = cat.data.filter((b) => {
-    const isAch = b.code.startsWith("ACH_");
+    const isAch = b["code"].startsWith("ACH_");
     if (opts.prefix === "ach" && !isAch) return false;
     if (opts.prefix === "other" && isAch) return false;
     if (!q) return true;
-    return b.code.toLowerCase().includes(q) || (b.name ?? "").toLowerCase().includes(q);
+    return b["code"].toLowerCase().includes(q) || (b["name"] ?? "").toLowerCase().includes(q);
   });
   const start = (opts.page - 1) * opts.pageSize;
   return {
