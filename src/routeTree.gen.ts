@@ -10,33 +10,79 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as BadgesRouteImport } from './routes/badges'
+import { Route as HabbosRouteImport } from './routes/habbos'
+import { Route as HabboHotelUsernameRouteImport } from './routes/habbo.$hotel.$username'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BadgesRoute = BadgesRouteImport.update({
+  id: '/badges',
+  path: '/badges',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HabbosRoute = HabbosRouteImport.update({
+  id: '/habbos',
+  path: '/habbos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HabboHotelUsernameRoute = HabboHotelUsernameRouteImport.update({
+  id: '/habbo/$hotel/$username',
+  path: '/habbo/$hotel/$username',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/badges': typeof BadgesRoute
+  '/habbos': typeof HabbosRoute
+  '/habbo/$hotel/$username': typeof HabboHotelUsernameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/badges': typeof BadgesRoute
+  '/habbos': typeof HabbosRoute
+  '/habbo/$hotel/$username': typeof HabboHotelUsernameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/badges': typeof BadgesRoute
+  '/habbos': typeof HabbosRoute
+  '/habbo/$hotel/$username': typeof HabboHotelUsernameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/about' | '/badges' | '/habbos' | '/habbo/$hotel/$username'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/about' | '/badges' | '/habbos' | '/habbo/$hotel/$username'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/badges'
+    | '/habbos'
+    | '/habbo/$hotel/$username'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BadgesRoute: typeof BadgesRoute
+  HabbosRoute: typeof HabbosRoute
+  HabboHotelUsernameRoute: typeof HabboHotelUsernameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +94,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/badges': {
+      id: '/badges'
+      path: '/badges'
+      fullPath: '/badges'
+      preLoaderRoute: typeof BadgesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/habbos': {
+      id: '/habbos'
+      path: '/habbos'
+      fullPath: '/habbos'
+      preLoaderRoute: typeof HabbosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/habbo/$hotel/$username': {
+      id: '/habbo/$hotel/$username'
+      path: '/habbo/$hotel/$username'
+      fullPath: '/habbo/$hotel/$username'
+      preLoaderRoute: typeof HabboHotelUsernameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BadgesRoute: BadgesRoute,
+  HabbosRoute: HabbosRoute,
+  HabboHotelUsernameRoute: HabboHotelUsernameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
