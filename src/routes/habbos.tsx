@@ -4,7 +4,7 @@ import { ArrowUpRight, CornerDownLeft, Info, Loader2, Search, SearchX } from "lu
 import { useEffect, useState, type FormEvent } from "react";
 import { z } from "zod";
 
-import hotelImage from "@/assets/habbo-hotel.png.asset.json";
+import hotelImage from "@/assets/complexo-urbano-futurista.webp.asset.json";
 import { Button } from "@/components/ui/button";
 import { PlayerCard, PlayerCardSkeleton } from "@/components/habbo/PlayerCard";
 import { SavedPlayers } from "@/components/habbo/SavedPlayers";
@@ -157,7 +157,7 @@ function InitialState() {
         </div>
       </div>
       <div className="flex justify-center">
-        <img src={hotelImage.url} alt="Hotel Habbo em pixel art, com piscinas e terraços" width={348} height={440} className="pixelated h-auto w-60 max-w-full" loading="lazy" />
+        <img src={hotelImage.url} alt="Complexo urbano futurista em pixel art isométrica, com terraços, piscinas e uma torre com antena" width={700} height={885} className="h-auto w-64 max-w-full drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]" loading="lazy" />
       </div>
     </div>
   );
