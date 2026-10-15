@@ -117,7 +117,7 @@ function Head({ p, name, hotel }: { p: ReturnType<typeof usePlayer>; name: strin
   );
 }
 
-function Cell({ row, win, loading }: { row?: Row; win: boolean; loading: boolean }) {
+function Cell({ row, win, loading }: { row: Row | undefined; win: boolean; loading: boolean }) {
   if (loading) return <div className="p-3"><span className="inline-block h-4 w-12 animate-pulse rounded bg-surface" /></div>;
   return (
     <div className={`p-3 text-center ${win ? "font-semibold text-success" : row?.display ? "text-foreground" : "text-muted-foreground/60"}`}>
