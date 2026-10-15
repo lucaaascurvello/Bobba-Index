@@ -12,23 +12,14 @@ import { nl } from "./nl";
 import { pt, type Dict } from "./pt";
 import { tr } from "./tr";
 
-/** Each hotel's main language. */
-export const HOTEL_LOCALE: Record<HotelId, { locale: string; dict: Dict }> = {
-  br: { locale: "pt-BR", dict: pt },
-  com: { locale: "en-US", dict: en },
-  es: { locale: "es-ES", dict: es },
-  de: { locale: "de-DE", dict: de },
-  fr: { locale: "fr-FR", dict: fr },
-  it: { locale: "it-IT", dict: it },
-  nl: { locale: "nl-NL", dict: nl },
-  fi: { locale: "fi-FI", dict: fi },
-  tr: { locale: "tr-TR", dict: tr },
-};
+/** Each hotel's main language dictionary. */
+const DICTS: Record<HotelId, Dict> = { br: pt, com: en, es, de, fr, it, nl, fi, tr };
 
 export type TKey = keyof Dict;
 
 export function translator(hotel: HotelId) {
-  const { locale, dict } = HOTEL_LOCALE[hotel] ?? HOTEL_LOCALE.br;
+  const locale = HOTEL_LOCALE[hotel] ?? "pt-BR";
+  const dict = DICTS[hotel] ?? pt;
   const t = (key: TKey, vars?: Record<string, string | number>) => {
     let s: string = dict[key] ?? pt[key];
     if (vars) for (const [k, v] of Object.entries(vars)) s = s.split(`{${k}}`).join(String(v));

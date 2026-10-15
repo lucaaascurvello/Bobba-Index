@@ -18,18 +18,20 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { HotelProvider } from "@/lib/habbo/hotel-context";
+import { useI18n } from "@/lib/i18n";
 
 function NotFoundComponent() {
+  const { t } = useI18n();
   return (
     <div className="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center px-4 text-center">
       <p className="font-pixel text-6xl text-primary-soft">404</p>
-      <h1 className="mt-4 font-display text-2xl font-semibold text-foreground">Bobba! Página não indexada.</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Este endereço não existe no Bobba Index.</p>
+      <h1 className="mt-4 font-display text-2xl font-semibold text-foreground">{t("nfTitle")}</h1>
+      <p className="mt-2 text-sm text-muted-foreground">{t("nfDesc")}</p>
       <Link
         to="/habbos"
         className="mt-6 inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
       >
-        Voltar à busca
+        {t("nfBack")}
       </Link>
     </div>
   );
