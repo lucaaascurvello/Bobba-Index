@@ -14,7 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      player_snapshots: {
+        Row: {
+          figure: string | null
+          first_seen_at: string
+          friends: Json | null
+          hotel: string
+          id: string
+          last_seen_at: string
+          motto: string | null
+          name: string
+          unique_id: string
+        }
+        Insert: {
+          figure?: string | null
+          first_seen_at?: string
+          friends?: Json | null
+          hotel: string
+          id?: string
+          last_seen_at?: string
+          motto?: string | null
+          name: string
+          unique_id: string
+        }
+        Update: {
+          figure?: string | null
+          first_seen_at?: string
+          friends?: Json | null
+          hotel?: string
+          id?: string
+          last_seen_at?: string
+          motto?: string | null
+          name?: string
+          unique_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
