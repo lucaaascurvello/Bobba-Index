@@ -216,20 +216,8 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
           !p.friends ? <Unavailable what="amigos" /> : p.friends.length === 0 ? (
             <StatePanel icon={Users} title="Nenhum amigo público" description="A API não retornou amigos deste jogador." />
           ) : (
-            <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {p.friends.map((f) => (
-                <li key={f.uniqueId}>
-                  <Link to="/habbo/$hotel/$username" params={{ hotel: user.hotel, username: f.name }} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 lift">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface">
-                      <HabboImage src={avatarUrl(user.hotel, { figure: f.figureString, name: f.name, size: "s", headOnly: true })} alt={`Avatar de ${f.name}`} width={27} height={30} fallback="avatar" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="truncate font-medium text-foreground">{f.name}</p>
-                      <p className="truncate text-xs text-muted-foreground">{f.motto ?? "Sem missão"}</p>
-                    </div>
-                  </Link>
-                </li>
-              ))}
+            <ul className="stagger grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              {p.friends.map((f) => <FriendCard key={f.uniqueId} hotel={user.hotel} friend={f} />)}
             </ul>
           ),
         )}
@@ -417,5 +405,34 @@ function RoomList({ hotel, rooms }: { hotel: string; rooms: HabboProfile["rooms"
         ))}
       </div>
     </>
+  );
+}
+
+function FriendCard({ hotel, friend: f }: { hotel: string; friend: NonNullable<HabboProfile["friends"]>[number] }) {
+  return (
+    <li>
+      <Link
+        to="/habbo/$hotel/$username"
+        params={{ hotel, username: f.name }}
+        className="lift group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <div className="relative flex h-32 items-end justify-center overflow-hidden bg-surface">
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-[image:var(--tile-floor)] opacity-70" aria-hidden />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_70%,color-mix(in_oklab,var(--primary)_30%,transparent),transparent_65%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden />
+          <HabboImage
+            src={avatarUrl(hotel, { figure: f.figureString, name: f.name, size: "m" })}
+            alt={`Avatar de ${f.name}`}
+            width={64}
+            height={110}
+            fallback="avatar"
+            className="relative -mb-1 h-[110px] w-[64px] object-contain transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-105"
+          />
+        </div>
+        <div className="flex flex-1 flex-col gap-1 border-t border-border p-3">
+          <p className="truncate font-display text-sm font-semibold text-foreground transition-colors group-hover:text-primary-soft">{f.name}</p>
+          <p className="line-clamp-2 text-xs text-muted-foreground">{f.motto ?? <span className="italic opacity-70">Sem missão</span>}</p>
+        </div>
+      </Link>
+    </li>
   );
 }
