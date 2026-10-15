@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, CalendarDays, Lock } from "lucide-react";
 
 import { HabboImage } from "@/components/habbo/HabboImage";
+import { HistorySummary } from "@/components/habbo/HistoryPanel";
+import { usePlayerHistory } from "@/lib/habbo/use-history";
 import { getHotel } from "@/lib/habbo/hotels";
 import { avatarUrl } from "@/lib/habbo/images";
 import type { HabboUser } from "@/lib/habbo/types";
@@ -10,6 +12,7 @@ import { useI18n } from "@/lib/i18n";
 export function PlayerCard({ user }: { user: HabboUser }) {
   const { t, date } = useI18n();
   const since = date(user.memberSince);
+  const history = usePlayerHistory(user);
   return (
     <Link
       to="/habbo/$hotel/$username"
@@ -48,6 +51,7 @@ export function PlayerCard({ user }: { user: HabboUser }) {
             <span className="flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> {t("privateProfile")}</span>
           )}
         </div>
+        <div className="mt-3"><HistorySummary hotel={user.hotel} history={history.data} /></div>
       </div>
       <span className="hidden items-center gap-1 text-sm font-medium text-primary-soft sm:flex">
         {t("openProfile")} <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

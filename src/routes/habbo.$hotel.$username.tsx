@@ -30,6 +30,7 @@ export const Route = createFileRoute("/habbo/$hotel/$username")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>): { tab?: string | undefined } => ({ tab: typeof s["tab"] === "string" ? s["tab"] : undefined }),
   component: ProfilePage,
 });
 
@@ -152,6 +153,8 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
     return render(profile);
   };
   const count = (n?: number | null) => (n == null ? "" : ` (${n})`);
+  const historyQ = usePlayerHistory(user);
+  const initialTab = Route.useSearch().tab ?? "overview";
   return (
     <Tabs defaultValue={initialTab} className="mt-8">
       <TabsList className="h-auto w-full justify-start overflow-x-auto bg-surface p-1">
