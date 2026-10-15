@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 
-import type { Database } from "@/integrations/supabase/types";
+import type { Database, Json } from "@/integrations/supabase/types";
 import { fetchProfile, fetchUserByName } from "./api";
 import { buildHistory, decideWrite, type PlayerHistory, type Snapshot, type SnapshotFriend } from "./history";
 
@@ -76,7 +76,7 @@ export const recordSnapshotFn = createServerFn({ method: "POST" })
         name: current.name,
         figure: current.figure,
         motto: current.motto,
-        friends: current.friends as unknown as Database["public"]["Tables"]["player_snapshots"]["Insert"]["friends"],
+        friends: (current.friends ?? null) as unknown as Json,
         first_seen_at: now,
         last_seen_at: now,
       });
