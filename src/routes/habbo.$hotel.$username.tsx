@@ -180,9 +180,9 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
           !p.groups ? <Unavailable what="grupos" /> : p.groups.length === 0 ? (
             <StatePanel icon={Users} title="Nenhum grupo" description="Este jogador não participa de grupos públicos." />
           ) : (
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="stagger grid gap-3 sm:grid-cols-2">
               {p.groups.map((g) => (
-                <div key={g.id} className="flex gap-4 rounded-xl border border-border bg-card p-4">
+                <div key={g.id} className="lift flex gap-4 rounded-xl border border-border bg-card p-4">
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-surface">
                     {g.badgeCode ? <HabboImage src={groupBadgeUrl(user.hotel, g.badgeCode)} alt={`Emblema do grupo ${g.name}`} width={39} height={39} /> : <Users className="h-5 w-5 text-muted-foreground" />}
                   </div>
@@ -219,7 +219,7 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
             <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {p.friends.map((f) => (
                 <li key={f.uniqueId}>
-                  <Link to="/habbo/$hotel/$username" params={{ hotel: user.hotel, username: f.name }} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:border-primary/50">
+                  <Link to="/habbo/$hotel/$username" params={{ hotel: user.hotel, username: f.name }} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 lift">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface">
                       <HabboImage src={avatarUrl(user.hotel, { figure: f.figureString, name: f.name, size: "s", headOnly: true })} alt={`Avatar de ${f.name}`} width={27} height={30} fallback="avatar" />
                     </div>
@@ -279,14 +279,14 @@ function Overview({ user }: { user: HabboUser }) {
               <span className="font-medium text-foreground">{pct != null ? `${pct}%` : "Indisponível"}</span>
             </div>
             <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-surface" role="progressbar" aria-valuenow={pct ?? 0} aria-valuemin={0} aria-valuemax={100}>
-              <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${Math.min(100, Math.max(0, pct ?? 0))}%` }} />
+              <div className="shimmer animate-fill h-full rounded-full bg-gradient-to-r from-primary to-primary-soft" style={{ width: `${Math.min(100, Math.max(0, pct ?? 0))}%` }} />
             </div>
           </div>
         </div>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="stagger grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((s) => (
-          <div key={s.label} className="rounded-xl border border-border bg-card p-4">
+          <div key={s.label} className="lift rounded-xl border border-border bg-card p-4">
             <p className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-muted-foreground"><s.icon className="h-3.5 w-3.5" />{s.label}</p>
             <p className={`mt-2 font-display text-xl font-semibold ${s.value ? "text-foreground" : "text-muted-foreground/60"}`}>{s.value ?? "Indisponível"}</p>
           </div>
@@ -307,12 +307,12 @@ function Overview({ user }: { user: HabboUser }) {
 
 function BadgeGrid({ badges }: { badges: HabboBadge[] }) {
   return (
-    <ul className="grid grid-cols-[repeat(auto-fill,minmax(72px,1fr))] gap-2">
+    <ul className="stagger grid grid-cols-[repeat(auto-fill,minmax(72px,1fr))] gap-2">
       {badges.map((b) => (
         <li key={b.code}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <button className="flex aspect-square w-full items-center justify-center rounded-lg border border-border bg-card transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={b.name ?? b.code}>
+              <button className="flex aspect-square w-full items-center justify-center rounded-lg border border-border bg-card lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={b.name ?? b.code}>
                 <HabboImage src={badgeImageUrl(b.code)} alt={b.name ?? b.code} width={40} height={40} />
               </button>
             </TooltipTrigger>
@@ -348,7 +348,7 @@ function Photos({ user }: { user: HabboUser }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {q.data.map((p) => (
-        <a key={p.id} href={p.url} target="_blank" rel="noreferrer" className="overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50">
+        <a key={p.id} href={p.url} target="_blank" rel="noreferrer" className="overflow-hidden rounded-xl border border-border bg-card lift">
           <HabboImage src={p.previewUrl ?? p.url} alt={`Foto de ${user.name}`} className="aspect-[4/3] w-full bg-surface object-cover" />
           <div className="flex justify-between p-3 text-xs text-muted-foreground">
             <span>{formatDate(p.takenAt) ?? "Data indisponível"}</span>
