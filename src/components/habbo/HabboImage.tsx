@@ -16,6 +16,7 @@ interface Props {
 /** Pixel-perfect remote image with a graceful fallback when the Habbo CDN fails. */
 export function HabboImage({ src, alt, className, width, height, eager, fallback = "image" }: Props) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   if (failed) {
     const Icon = fallback === "avatar" ? UserRound : ImageOff;
     return (
@@ -33,8 +34,10 @@ export function HabboImage({ src, alt, className, width, height, eager, fallback
       loading={eager ? "eager" : "lazy"}
       decoding="async"
       referrerPolicy="no-referrer"
+      ref={(el) => { if (el?.complete && el.naturalWidth > 0 && !loaded) setLoaded(true); }}
+      onLoad={() => setLoaded(true)}
       onError={() => setFailed(true)}
-      className={cn("pixelated", className)}
+      className={cn("pixelated transition-[opacity,transform] duration-500 ease-out", loaded ? "opacity-100" : "opacity-0", className)}
     />
   );
 }

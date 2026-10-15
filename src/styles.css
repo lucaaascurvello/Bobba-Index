@@ -172,3 +172,73 @@
     linear-gradient(90deg, color-mix(in oklab, var(--border) 45%, transparent) 1px, transparent 1px);
   background-size: 32px 32px;
 }
+
+@keyframes bobba-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bobba-page-in {
+  from { opacity: 0; transform: translateY(12px); filter: blur(2px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@keyframes bobba-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes bobba-shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+@utility animate-fade-up {
+  animation: bobba-fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-page-in {
+  animation: bobba-page-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-fill {
+  transform-origin: left;
+  animation: bobba-fill 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+@utility stagger {
+  & > * { animation: bobba-fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  & > *:nth-child(1) { animation-delay: 0ms; }
+  & > *:nth-child(2) { animation-delay: 40ms; }
+  & > *:nth-child(3) { animation-delay: 80ms; }
+  & > *:nth-child(4) { animation-delay: 120ms; }
+  & > *:nth-child(5) { animation-delay: 160ms; }
+  & > *:nth-child(6) { animation-delay: 200ms; }
+  & > *:nth-child(7) { animation-delay: 240ms; }
+  & > *:nth-child(8) { animation-delay: 280ms; }
+  & > *:nth-child(n + 9) { animation-delay: 320ms; }
+}
+/* Lift + subtle glow for interactive cards/buttons/badges */
+@utility lift {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+  &:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--primary) 55%, transparent);
+    box-shadow: var(--shadow-glow);
+  }
+  &:active { transform: translateY(-1px) scale(0.99); }
+}
+@utility shimmer {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--foreground) 18%, transparent), transparent);
+    animation: bobba-shimmer 2.2s ease-in-out 1.2s infinite;
+  }
+}
+
+@layer base {
+  button, a { -webkit-tap-highlight-color: transparent; }
+  .animate-pulse { animation-duration: 1.6s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
