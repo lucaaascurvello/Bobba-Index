@@ -89,14 +89,5 @@ Habbo e suas respectivas marcas e propriedades intelectuais pertencem aos seus t
 
 Projeto pessoal que une tecnologia, criatividade e experimentação para transformar ideias em ferramentas digitais.
 
-- 💼 [GitHub](https://github.com/lucaaascurvello)
 - 🚀 [Acessar o Bobba Index](https://bobba-hub-explorer.lovable.app/)
-- 💻 [Repositório do projeto](https://github.com/lucaaascurvello/Bobba-Index)
 
----
-
-<p align="center">
-  <strong>BOBBA INDEX</strong>
-  <br>
-  Explorando o universo Habbo, um dado de cada vez. 💜
-</p>
