@@ -2,13 +2,14 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, CalendarDays, Lock } from "lucide-react";
 
 import { HabboImage } from "@/components/habbo/HabboImage";
-import { formatDate } from "@/lib/format";
 import { getHotel } from "@/lib/habbo/hotels";
 import { avatarUrl } from "@/lib/habbo/images";
 import type { HabboUser } from "@/lib/habbo/types";
+import { useI18n } from "@/lib/i18n";
 
 export function PlayerCard({ user }: { user: HabboUser }) {
-  const since = formatDate(user.memberSince);
+  const { t, date } = useI18n();
+  const since = date(user.memberSince);
   return (
     <Link
       to="/habbo/$hotel/$username"
@@ -19,7 +20,7 @@ export function PlayerCard({ user }: { user: HabboUser }) {
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-[image:var(--tile-floor)] opacity-70" aria-hidden />
         <HabboImage
           src={avatarUrl(user.hotel, { figure: user.figureString, name: user.name, size: "m" })}
-          alt={`Avatar de ${user.name}`}
+          alt={t("avatarOf", { name: user.name })}
           width={64}
           height={110}
           eager
@@ -35,21 +36,21 @@ export function PlayerCard({ user }: { user: HabboUser }) {
           </span>
         </div>
         <p className="mt-1 truncate text-sm text-muted-foreground">
-          {user.motto ?? <span className="italic opacity-70">Sem missão pública</span>}
+          {user.motto ?? <span className="italic opacity-70">{t("noMotto")}</span>}
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
             <CalendarDays className="h-3.5 w-3.5" />
-            {since ? `Membro desde ${since}` : "Data de registro indisponível"}
+            {since ? t("memberSince", { date: since }) : t("noSince")}
           </span>
           <span>{getHotel(user.hotel)?.name}</span>
           {!user.profileVisible && (
-            <span className="flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> Perfil privado</span>
+            <span className="flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> {t("privateProfile")}</span>
           )}
         </div>
       </div>
       <span className="hidden items-center gap-1 text-sm font-medium text-primary-soft sm:flex">
-        Abrir perfil <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        {t("openProfile")} <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
       </span>
     </Link>
   );

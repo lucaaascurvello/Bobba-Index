@@ -5,19 +5,25 @@ import { useState } from "react";
 import { HabboImage } from "@/components/habbo/HabboImage";
 import { avatarUrl } from "@/lib/habbo/images";
 import { useFavorites, useRecentSearches, type SavedPlayer } from "@/lib/local-store";
+import { useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-function timeAgo(at: number) {
-  const m = Math.round((Date.now() - at) / 60000);
-  if (m < 1) return "agora";
-  if (m < 60) return `há ${m} min`;
-  const h = Math.round(m / 60);
-  if (h < 24) return `há ${h} h`;
-  return `há ${Math.round(h / 24)} d`;
+function useTimeAgo() {
+  const { t } = useI18n();
+  return (at: number) => {
+    const m = Math.round((Date.now() - at) / 60000);
+    if (m < 1) return t("agoNow");
+    if (m < 60) return t("agoMin", { n: m });
+    const h = Math.round(m / 60);
+    if (h < 24) return t("agoH", { n: h });
+    return t("agoD", { n: Math.round(h / 24) });
+  };
 }
 
 function SavedCard({ p, favorite, onRemove }: { p: SavedPlayer; favorite?: boolean; onRemove?: () => void }) {
   const [leaving, setLeaving] = useState(false);
+  const { t } = useI18n();
+  const timeAgo = useTimeAgo();
   return (
     <li className={cn("transition-all duration-300 ease-out", leaving && "scale-90 opacity-0")}>
       <div className="lift group relative overflow-hidden rounded-xl border border-border bg-card">
@@ -26,7 +32,7 @@ function SavedCard({ p, favorite, onRemove }: { p: SavedPlayer; favorite?: boole
             <span className="absolute inset-x-0 bottom-0 h-1/3 bg-[image:var(--tile-floor)] opacity-70" aria-hidden />
             <HabboImage
               src={avatarUrl(p.hotel, { figure: p.figure ?? null, name: p.name, size: "m", headOnly: true })}
-              alt={`Avatar de ${p.name}`}
+              alt={t("avatarOf", { name: p.name })}
               width={54}
               height={62}
               fallback="avatar"
@@ -47,7 +53,7 @@ function SavedCard({ p, favorite, onRemove }: { p: SavedPlayer; favorite?: boole
         {onRemove && (
           <button
             onClick={() => { setLeaving(true); setTimeout(onRemove, 250); }}
-            aria-label={`Remover ${p.name}`}
+            aria-label={t("remove", { name: p.name })}
             className="absolute right-1.5 top-1.5 rounded-md p-1 text-muted-foreground opacity-60 transition-all hover:bg-surface hover:text-foreground group-hover:opacity-100"
           >
             <X className="h-3.5 w-3.5" />
@@ -63,6 +69,7 @@ const grid = "stagger grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4";
 export function SavedPlayers() {
   const recent = useRecentSearches();
   const fav = useFavorites();
+  const { t } = useI18n();
   const [clearing, setClearing] = useState(false);
   if (recent.items.length === 0 && fav.items.length === 0) return null;
   return (
@@ -70,7 +77,7 @@ export function SavedPlayers() {
       {fav.items.length > 0 && (
         <section>
           <h2 className="mb-3 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            <Star className="h-3.5 w-3.5 text-primary-soft" /> Favoritos <span className="text-muted-foreground/60">{fav.items.length}</span>
+            <Star className="h-3.5 w-3.5 text-primary-soft" /> {t("favorites")} <span className="text-muted-foreground/60">{fav.items.length}</span>
           </h2>
           <ul className={grid}>{fav.items.map((p) => <SavedCard key={p.hotel + p.name} p={p} favorite onRemove={() => fav.remove(p.hotel, p.name)} />)}</ul>
         </section>
@@ -78,12 +85,12 @@ export function SavedPlayers() {
       {recent.items.length > 0 && (
         <section className={cn("transition-opacity duration-300", clearing && "opacity-0")}>
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground"><History className="h-3.5 w-3.5" /> Buscas recentes</h2>
+            <h2 className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground"><History className="h-3.5 w-3.5" /> {t("recent")}</h2>
             <button
               onClick={() => { setClearing(true); setTimeout(() => { recent.clear(); setClearing(false); }, 300); }}
               className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
             >
-              <Trash2 className="h-3 w-3" /> Limpar
+              <Trash2 className="h-3 w-3" /> {t("clear")}
             </button>
           </div>
           <ul className={grid}>{recent.items.map((p) => <SavedCard key={p.hotel + p.name} p={p} />)}</ul>

@@ -4,18 +4,19 @@ import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { HabboError } from "@/lib/habbo/queries";
 import type { HabboErrorKind } from "@/lib/habbo/types";
+import { useI18n, type TKey } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-const META: Record<HabboErrorKind, { icon: LucideIcon; title: string }> = {
-  invalid_input: { icon: AlertTriangle, title: "Entrada inválida" },
-  not_found: { icon: SearchX, title: "Nada encontrado" },
-  private: { icon: Lock, title: "Perfil privado" },
-  rate_limited: { icon: Clock, title: "Limite de consultas atingido" },
-  blocked: { icon: Ban, title: "Consulta recusada" },
-  timeout: { icon: Clock, title: "Tempo esgotado" },
-  network: { icon: WifiOff, title: "Falha de conexão" },
-  upstream: { icon: ServerCrash, title: "O Habbo está instável" },
-  unsupported_hotel: { icon: Ban, title: "Hotel não suportado" },
+const META: Record<HabboErrorKind, { icon: LucideIcon; title: TKey }> = {
+  invalid_input: { icon: AlertTriangle, title: "errInvalid" },
+  not_found: { icon: SearchX, title: "errNotFound" },
+  private: { icon: Lock, title: "privateProfile" },
+  rate_limited: { icon: Clock, title: "errRate" },
+  blocked: { icon: Ban, title: "errBlocked" },
+  timeout: { icon: Clock, title: "errTimeout" },
+  network: { icon: WifiOff, title: "errNetwork" },
+  upstream: { icon: ServerCrash, title: "errUpstream" },
+  unsupported_hotel: { icon: Ban, title: "errUnsupported" },
 };
 
 export function StatePanel({
@@ -44,17 +45,18 @@ export function StatePanel({
 }
 
 export function ErrorPanel({ error, onRetry, className }: { error: unknown; onRetry?: (() => void) | undefined; className?: string | undefined }) {
+  const { t } = useI18n();
   const kind: HabboErrorKind = error instanceof HabboError ? error.kind : "network";
   const meta = META[kind];
-  const message = error instanceof Error ? error.message : "Erro inesperado.";
+  const message = error instanceof Error ? error.message : t("unexpected");
   const retryable = !["not_found", "private", "invalid_input", "unsupported_hotel"].includes(kind);
   return (
     <StatePanel
       icon={meta.icon}
-      title={meta.title}
+      title={t(meta.title)}
       description={message}
       className={className}
-      action={retryable && onRetry ? <Button variant="outline" onClick={onRetry}>Tentar novamente</Button> : undefined}
+      action={retryable && onRetry ? <Button variant="outline" onClick={onRetry}>{t("retry")}</Button> : undefined}
     />
   );
 }
