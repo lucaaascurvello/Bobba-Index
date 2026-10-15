@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      badge_catalog_snapshots: {
+        Row: {
+          fetched_at: string
+          hotel: string
+          items: Json
+        }
+        Insert: {
+          fetched_at?: string
+          hotel: string
+          items: Json
+        }
+        Update: {
+          fetched_at?: string
+          hotel?: string
+          items?: Json
+        }
+        Relationships: []
+      }
       player_snapshots: {
         Row: {
           figure: string | null
