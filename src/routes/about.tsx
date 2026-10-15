@@ -125,7 +125,7 @@ function AboutPage() {
         <li>{t("lim4")}</li>
       </ul>
 
-      <section className="mt-12 border-t border-border pt-10">
+      <section id="desenvolvedor" className="mt-12 scroll-mt-24 border-t border-border pt-10">
         <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
           <p className="font-pixel text-xs uppercase text-primary-soft">{t("devLabel")}</p>
           <div className="mt-5 flex flex-col gap-6 sm:flex-row sm:items-start">
