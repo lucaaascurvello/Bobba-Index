@@ -22,3 +22,8 @@
 ## Espaçamento do rodapé
 - [x] Reduzir o espaço entre o fim do conteúdo e o rodapé em todas as páginas.
 - [x] Medir o espaço em /habbos, /badges, /about, /fotos e em um perfil.
+
+## Rodapé renovado
+- [x] Trocar "Sobre o projeto" por botão do repositório no GitHub e botão "Conheça o desenvolvedor".
+- [x] Criar âncora na seção do desenvolvedor da página Sobre e ligar o botão a ela.
+- [x] Deixar o texto do rodapé mais legível; verificar nos nove idiomas e no celular.
