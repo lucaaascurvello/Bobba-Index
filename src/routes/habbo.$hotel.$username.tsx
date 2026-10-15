@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute, useRouter } from "@tanstack/react-router";
-import { ArrowLeft, Award, CalendarDays, Clock, Gem, Home, Link2, Lock, Sparkles, Star, Users } from "lucide-react";
+import { ArrowLeft, Award, Camera, Heart, Trophy, CalendarDays, Clock, Gem, Home, Link2, Lock, Sparkles, Star, Users } from "lucide-react";
 import type { ReactNode } from "react";
 import { toast } from "sonner";
 
@@ -12,7 +12,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { formatDate, formatNumber } from "@/lib/format";
 import { getHotel, isSupportedHotel } from "@/lib/habbo/hotels";
 import { avatarUrl, badgeImageUrl, groupBadgeUrl } from "@/lib/habbo/images";
-import { HabboError, profileQuery, userByNameQuery } from "@/lib/habbo/queries";
+import { HabboError, photosQuery, profileQuery, userByNameQuery } from "@/lib/habbo/queries";
 import type { HabboBadge, HabboProfile, HabboUser } from "@/lib/habbo/types";
 
 export const Route = createFileRoute("/habbo/$hotel/$username")({
@@ -139,6 +139,9 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
         <TabsTrigger value="badges">Emblemas{count(profile?.badges?.length)}</TabsTrigger>
         <TabsTrigger value="groups">Grupos{count(profile?.groups?.length)}</TabsTrigger>
         <TabsTrigger value="rooms">Quartos{count(profile?.rooms?.length)}</TabsTrigger>
+        <TabsTrigger value="friends">Amigos{count(profile?.friends?.length)}</TabsTrigger>
+        <TabsTrigger value="achievements">Conquistas{count(profile?.badges?.filter((b) => b.code.startsWith("ACH_")).length)}</TabsTrigger>
+        <TabsTrigger value="photos">Fotos</TabsTrigger>
       </TabsList>
 
       <TabsContent value="overview" className="mt-6 space-y-6">
@@ -219,6 +222,48 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
           ),
         )}
       </TabsContent>
+
+      <TabsContent value="friends" className="mt-6">
+        {section((p) =>
+          !p.friends ? <Unavailable what="amigos" /> : p.friends.length === 0 ? (
+            <StatePanel icon={Users} title="Nenhum amigo público" description="A API não retornou amigos deste jogador." />
+          ) : (
+            <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {p.friends.map((f) => (
+                <li key={f.uniqueId}>
+                  <Link to="/habbo/$hotel/$username" params={{ hotel: user.hotel, username: f.name }} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:border-primary/50">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface">
+                      <HabboImage src={avatarUrl(user.hotel, { figure: f.figureString, name: f.name, size: "s", headOnly: true })} alt={`Avatar de ${f.name}`} width={27} height={30} fallback="avatar" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate font-medium text-foreground">{f.name}</p>
+                      <p className="truncate text-xs text-muted-foreground">{f.motto ?? "Sem missão"}</p>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ),
+        )}
+      </TabsContent>
+
+      <TabsContent value="achievements" className="mt-6">
+        {section((p) => {
+          const ach = (p.badges ?? []).filter((b) => b.code.startsWith("ACH_"));
+          return ach.length === 0 ? (
+            <StatePanel icon={Trophy} title="Sem conquistas" description="Nenhum emblema de conquista (ACH_) na coleção pública." />
+          ) : (
+            <>
+              <p className="mb-4 text-xs text-muted-foreground">Emblemas de conquista encontrados na coleção pública.</p>
+              <BadgeGrid badges={ach} />
+            </>
+          );
+        })}
+      </TabsContent>
+
+      <TabsContent value="photos" className="mt-6">
+        <Photos user={user} />
+      </TabsContent>
     </Tabs>
   );
 }
@@ -289,3 +334,23 @@ function GridSkeleton() {
 const Unavailable = ({ what }: { what: string }) => (
   <StatePanel title="Dados indisponíveis" description={`A fonte de dados não retornou ${what} para este perfil.`} />
 );
+
+function Photos({ user }: { user: HabboUser }) {
+  const q = useQuery(photosQuery(user.hotel, user.uniqueId));
+  if (q.isPending) return <GridSkeleton />;
+  if (q.isError) return <ErrorPanel error={q.error} onRetry={() => q.refetch()} />;
+  if (q.data.length === 0) return <StatePanel icon={Camera} title="Nenhuma foto pública" description="Este jogador não tem fotos publicadas." />;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {q.data.map((p) => (
+        <a key={p.id} href={p.url} target="_blank" rel="noreferrer" className="overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50">
+          <HabboImage src={p.previewUrl ?? p.url} alt={`Foto de ${user.name}`} className="aspect-[4/3] w-full bg-surface object-cover" />
+          <div className="flex justify-between p-3 text-xs text-muted-foreground">
+            <span>{formatDate(p.takenAt) ?? "Data indisponível"}</span>
+            {p.likes != null && <span className="flex items-center gap-1"><Heart className="h-3 w-3" />{p.likes}</span>}
+          </div>
+        </a>
+      ))}
+    </div>
+  );
+}
