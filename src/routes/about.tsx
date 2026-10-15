@@ -1,7 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Globe2, GraduationCap, Monitor, Search, ShieldCheck, UserRound } from "lucide-react";
+import { useState } from "react";
+import { Copy, Check, Github, Globe2, GraduationCap, Linkedin, Monitor, Search, ShieldCheck, UserRound } from "lucide-react";
 
+import lucasPhoto from "@/assets/lucas-curvello.webp.asset.json";
+import qrPix from "@/assets/cafezinho-qr.png.asset.json";
 import { useI18n } from "@/lib/i18n";
+
+const PIX_CODE = "00020101021126580014br.gov.bcb.pix013602f1c965-4f88-4396-a8ca-8bab9e280f0f5204000053039865802BR5921LUCAS W C DE CARVALHO6007PALHOCA62070503***6304591A";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
