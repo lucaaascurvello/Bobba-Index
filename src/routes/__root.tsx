@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -125,5 +126,14 @@ function RootComponent() {
         </TooltipProvider>
       </HotelProvider>
     </QueryClientProvider>
+  );
+}
+
+function PageTransition() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  return (
+    <div key={pathname} className="animate-page-in">
+      <Outlet />
+    </div>
   );
 }
