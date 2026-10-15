@@ -57,7 +57,7 @@ async function getJson(url: string): Promise<ApiResult<unknown>> {
 
 function hotelBase(hotel: string): ApiResult<string> {
   const config = getHotel(hotel);
-  if (!config || !isSupportedHotel(hotel)) return fail("unsupported_hotel", "Este hotel está temporariamente indisponível. Selecione Habbo Brasil.");
+  if (!config || !isSupportedHotel(hotel)) return fail("unsupported_hotel", "Hotel não suportado.");
   return { ok: true, data: `https://${config.domain}` };
 }
 
