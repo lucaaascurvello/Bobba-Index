@@ -101,3 +101,7 @@ export interface HabboPhoto {
   takenAt: string | null;
   likes: number | null;
 }
+
+export interface CommunityPhoto extends HabboPhoto {
+  creatorName: string | null;
+}

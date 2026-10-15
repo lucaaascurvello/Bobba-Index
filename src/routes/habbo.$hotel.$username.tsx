@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute, useRouter } from "@tanstack/react-router";
-import { ArrowLeft, Award, Camera, Heart, Trophy, CalendarDays, Clock, Gem, Home, Link2, Lock, Sparkles, Star, Users } from "lucide-react";
+import { ArrowLeft, Award, Camera, Heart, Trophy, CalendarDays, Clock, Gem, Home, Link2, Lock, Sparkles, Star, Users, ExternalLink, Crown, Hourglass } from "lucide-react";
+import { useState } from "react";
 import type { ReactNode } from "react";
 import { toast } from "sonner";
 
@@ -9,7 +10,8 @@ import { ErrorPanel, StatePanel } from "@/components/states/StatePanel";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { formatDate, formatNumber } from "@/lib/format";
+import { formatAccountAge, formatDate, formatNumber } from "@/lib/format";
+import { useFavorites } from "@/lib/local-store";
 import { getHotel, isSupportedHotel } from "@/lib/habbo/hotels";
 import { avatarUrl, badgeImageUrl, groupBadgeUrl } from "@/lib/habbo/images";
 import { HabboError, photosQuery, profileQuery, userByNameQuery } from "@/lib/habbo/queries";
@@ -22,6 +24,8 @@ export const Route = createFileRoute("/habbo/$hotel/$username")({
       { name: "description", content: `Perfil público de ${params.username} no Habbo: avatar, emblemas, grupos e quartos.` },
       { property: "og:title", content: `${params.username} no Bobba Index` },
       { property: "og:description", content: "Perfil público do Habbo, indexado." },
+      { property: "og:type", content: "profile" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ProfilePage,
@@ -84,7 +88,13 @@ function ProfileHeader({ user }: { user: HabboUser }) {
     <section className="relative overflow-hidden rounded-2xl border border-border bg-card">
       <div className="bg-grid absolute inset-0 opacity-40" aria-hidden />
       <div className="relative flex flex-col gap-6 p-6 sm:flex-row sm:items-end sm:p-8">
-        <div className="flex h-[150px] w-[110px] shrink-0 items-end justify-center rounded-xl border border-border bg-surface">
+        <div className="relative flex h-[150px] w-[110px] shrink-0 items-end justify-center rounded-xl border border-border bg-surface">
+          {user.online !== null && (
+            <span title={user.online ? "Online" : "Offline"} className={`absolute right-2 top-2 h-3.5 w-3.5 rounded-full border-2 border-card ${user.online ? "bg-success shadow-[0_0_10px_var(--color-success)]" : "bg-muted-foreground/50"}`} />
+          )}
+          {user.currentLevel != null && (
+            <span className="absolute left-2 top-2 rounded-md bg-primary px-1.5 py-0.5 font-pixel text-[10px] text-primary-foreground">Nv {user.currentLevel}</span>
+          )}
           <HabboImage
             src={avatarUrl(user.hotel, { figure: user.figureString, name: user.name, size: "l" })}
             alt={`Avatar de ${user.name}`}
@@ -99,7 +109,7 @@ function ProfileHeader({ user }: { user: HabboUser }) {
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="truncate font-display text-3xl font-semibold text-foreground sm:text-4xl">{user.name}</h1>
             {user.online !== null && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-2 py-0.5 text-xs text-muted-foreground">
+              <span className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs ${user.online ? "border-success/50 bg-success/10 text-success" : "border-border text-muted-foreground"}`}>
                 <span className={`h-1.5 w-1.5 rounded-full ${user.online ? "bg-success" : "bg-muted-foreground/50"}`} />
                 {user.online ? "Online" : "Offline"}
               </span>
@@ -109,10 +119,14 @@ function ProfileHeader({ user }: { user: HabboUser }) {
           <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5"><Home className="h-4 w-4" />{getHotel(user.hotel)?.name}</span>
             <span className="flex items-center gap-1.5"><CalendarDays className="h-4 w-4" />{since ? `Membro desde ${since}` : "Registro indisponível"}</span>
+            {formatAccountAge(user.memberSince) && <span className="flex items-center gap-1.5"><Hourglass className="h-4 w-4" />{formatAccountAge(user.memberSince)}</span>}
             {!user.profileVisible && <span className="flex items-center gap-1.5"><Lock className="h-4 w-4" />Perfil privado</span>}
           </div>
         </div>
-        <Button variant="outline" onClick={copy} className="shrink-0"><Link2 className="h-4 w-4" /> Copiar link</Button>
+        <div className="flex shrink-0 gap-2">
+          <FavButton user={user} />
+          <Button variant="outline" onClick={copy}><Link2 className="h-4 w-4" /> Copiar link</Button>
+        </div>
       </div>
     </section>
   );
@@ -175,9 +189,9 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <h3 className="truncate font-medium text-foreground">{g.name}</h3>
-                      {g.isAdmin && <span className="rounded bg-primary/15 px-1.5 py-0.5 text-[10px] font-medium text-primary-soft">Admin</span>}
+                      {g.isAdmin && <span className="flex items-center gap-1 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] font-medium text-primary-soft"><Crown className="h-3 w-3" />Admin / dono</span>}
                     </div>
-                    {g.description && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{g.description}</p>}
+                    <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">{g.description ?? <span className="italic opacity-70">Sem descrição</span>}</p>
                     {g.type && <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground/70">{g.type.toLowerCase()}</p>}
                   </div>
                 </div>
@@ -192,33 +206,7 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
           !p.rooms ? <Unavailable what="quartos" /> : p.rooms.length === 0 ? (
             <StatePanel icon={Home} title="Nenhum quarto público" description="A API não retornou quartos deste jogador." />
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {p.rooms.map((r) => (
-                <article key={String(r.id)} className="overflow-hidden rounded-xl border border-border bg-card">
-                  <div className="flex aspect-[110/110] max-h-44 w-full items-center justify-center bg-surface">
-                    {r.thumbnailUrl ? (
-                      <HabboImage src={r.thumbnailUrl} alt={`Miniatura do quarto ${r.name}`} className="h-full w-full object-cover" />
-                    ) : (
-                      <Home className="h-6 w-6 text-muted-foreground" />
-                    )}
-                  </div>
-                  <div className="p-4">
-                    <h3 className="truncate font-medium text-foreground">{r.name}</h3>
-                    {r.description && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{r.description}</p>}
-                    <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                      {r.rating != null && <span className="flex items-center gap-1"><Star className="h-3 w-3" />{r.rating}</span>}
-                      {r.maximumVisitors != null && <span className="flex items-center gap-1"><Users className="h-3 w-3" />até {r.maximumVisitors}</span>}
-                      {formatDate(r.creationTime) && <span>Criado em {formatDate(r.creationTime)}</span>}
-                    </div>
-                    {r.tags.length > 0 && (
-                      <div className="mt-3 flex flex-wrap gap-1">
-                        {r.tags.map((t) => <span key={t} className="rounded bg-surface px-1.5 py-0.5 text-[11px] text-muted-foreground">#{t}</span>)}
-                      </div>
-                    )}
-                  </div>
-                </article>
-              ))}
-            </div>
+            <RoomList hotel={user.hotel} rooms={p.rooms} />
           ),
         )}
       </TabsContent>
@@ -270,15 +258,32 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
 
 function Overview({ user }: { user: HabboUser }) {
   const stats: { label: string; value: string | null; icon: typeof Star }[] = [
-    { label: "Nível", value: user.currentLevel != null ? String(user.currentLevel) : null, icon: Sparkles },
-    { label: "Progresso do nível", value: user.currentLevelCompletePercent != null ? `${user.currentLevelCompletePercent}%` : null, icon: Sparkles },
     { label: "Experiência total", value: user.totalExperience != null ? formatNumber(user.totalExperience) : null, icon: Star },
     { label: "Estrelas de cristal", value: user.starGemCount != null ? formatNumber(user.starGemCount) : null, icon: Gem },
     { label: "Membro desde", value: formatDate(user.memberSince), icon: CalendarDays },
+    { label: "Idade da conta", value: formatAccountAge(user.memberSince), icon: Hourglass },
     { label: "Último acesso", value: formatDate(user.lastAccessTime, true), icon: Clock },
   ];
+  const pct = user.currentLevelCompletePercent;
   return (
     <>
+      <div className="rounded-xl border border-border bg-card p-5">
+        <div className="flex items-center gap-4">
+          <span className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-primary text-primary-foreground">
+            <span className="text-[10px] uppercase opacity-80">Nível</span>
+            <span className="font-display text-xl font-bold leading-none">{user.currentLevel ?? "?"}</span>
+          </span>
+          <div className="min-w-0 flex-1">
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" />Progresso até o nível {user.currentLevel != null ? user.currentLevel + 1 : "seguinte"}</span>
+              <span className="font-medium text-foreground">{pct != null ? `${pct}%` : "Indisponível"}</span>
+            </div>
+            <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-surface" role="progressbar" aria-valuenow={pct ?? 0} aria-valuemin={0} aria-valuemax={100}>
+              <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${Math.min(100, Math.max(0, pct ?? 0))}%` }} />
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((s) => (
           <div key={s.label} className="rounded-xl border border-border bg-card p-4">
@@ -352,5 +357,65 @@ function Photos({ user }: { user: HabboUser }) {
         </a>
       ))}
     </div>
+  );
+}
+
+function FavButton({ user }: { user: HabboUser }) {
+  const fav = useFavorites();
+  const on = fav.is(user.hotel, user.name);
+  return (
+    <Button
+      variant="outline"
+      aria-pressed={on}
+      onClick={() => {
+        fav.toggle({ hotel: user.hotel, name: user.name, figure: user.figureString });
+        toast.success(on ? "Removido dos favoritos" : "Adicionado aos favoritos");
+      }}
+    >
+      <Star className={`h-4 w-4 ${on ? "fill-primary-soft text-primary-soft" : ""}`} /> {on ? "Favorito" : "Favoritar"}
+    </Button>
+  );
+}
+
+function RoomList({ hotel, rooms }: { hotel: string; rooms: HabboProfile["rooms"] & object }) {
+  const [tag, setTag] = useState<string | null>(null);
+  const domain = getHotel(hotel)?.domain ?? "www.habbo.com.br";
+  const shown = tag ? rooms.filter((r) => r.tags.includes(tag)) : rooms;
+  return (
+    <>
+      {tag && (
+        <p className="mb-4 text-sm text-muted-foreground">
+          Filtrando por <span className="text-foreground">#{tag}</span> · <button className="text-primary-soft hover:underline" onClick={() => setTag(null)}>limpar</button>
+        </p>
+      )}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {shown.map((r) => (
+          <article key={String(r.id)} className="flex flex-col overflow-hidden rounded-xl border border-border bg-card">
+            <div className="flex aspect-[110/110] max-h-44 w-full items-center justify-center bg-surface">
+              {r.thumbnailUrl ? <HabboImage src={r.thumbnailUrl} alt={`Miniatura do quarto ${r.name}`} className="h-full w-full object-cover" /> : <Home className="h-6 w-6 text-muted-foreground" />}
+            </div>
+            <div className="flex flex-1 flex-col p-4">
+              <h3 className="truncate font-medium text-foreground">{r.name}</h3>
+              {r.description && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{r.description}</p>}
+              <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1" title="Avaliação"><Star className="h-3 w-3 fill-primary-soft text-primary-soft" />{r.rating != null ? formatNumber(r.rating) : "—"}</span>
+                <span className="flex items-center gap-1" title="Capacidade máxima"><Users className="h-3 w-3" />{r.maximumVisitors != null ? `até ${r.maximumVisitors} visitantes` : "capacidade indisponível"}</span>
+                {formatDate(r.creationTime) && <span>Criado em {formatDate(r.creationTime)}</span>}
+              </div>
+              {r.tags.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-1">
+                  {r.tags.map((t) => (
+                    <button key={t} onClick={() => setTag(t)} className={`rounded px-1.5 py-0.5 text-[11px] transition-colors ${tag === t ? "bg-primary/20 text-primary-soft" : "bg-surface text-muted-foreground hover:text-foreground"}`}>#{t}</button>
+                  ))}
+                </div>
+              )}
+              <a href={`https://${domain}/room/${r.id}`} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-1.5 self-start text-sm font-medium text-primary-soft hover:underline">
+                Visitar no Habbo <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </>
   );
 }

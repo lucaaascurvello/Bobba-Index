@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Award, Globe, Info, Menu, Moon, Users } from "lucide-react";
+import { Award, Camera, Globe, Info, Menu, Moon, Scale, Users } from "lucide-react";
 import { useState } from "react";
 
 import { Logo } from "@/components/brand/Logo";
@@ -11,6 +11,8 @@ import { useHotel } from "@/lib/habbo/hotel-context";
 const NAV = [
   { to: "/habbos", label: "Habbos", icon: Users },
   { to: "/badges", label: "Emblemas", icon: Award },
+  { to: "/fotos", label: "Fotos", icon: Camera },
+  { to: "/comparar", label: "Comparar", icon: Scale },
   { to: "/about", label: "Sobre", icon: Info },
 ] as const;
 

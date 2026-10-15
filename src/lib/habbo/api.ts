@@ -249,3 +249,27 @@ export function mapPhoto(p: Record<string, unknown>) {
     likes: Array.isArray(p["likes"]) ? p["likes"].length : num(p["likes"]),
   };
 }
+
+/** GET /api/public/badge/owners/{code} — how many players own a badge. */
+export async function fetchBadgeOwners(hotel: string, code: string): Promise<ApiResult<{ ownerCount: number | null }>> {
+  const base = hotelBase(hotel);
+  if (!base.ok) return base;
+  if (!/^[A-Za-z0-9_.-]{1,64}$/.test(code)) return fail("invalid_input", "Código inválido.");
+  const r = await getJson(`${base.data}/api/public/badge/owners/${encodeURIComponent(code)}`);
+  if (!r.ok) return r.error.kind === "not_found" ? { ok: true, data: { ownerCount: null } } : r;
+  return { ok: true, data: { ownerCount: num((r.data as Record<string, unknown>)?.["ownerCount"]) } };
+}
+
+/** GET /extradata/public/photos — latest public community photos. */
+export async function fetchCommunityPhotos(hotel: string): Promise<ApiResult<import("./types").CommunityPhoto[]>> {
+  const base = hotelBase(hotel);
+  if (!base.ok) return base;
+  const r = await getJson(`${base.data}/extradata/public/photos`);
+  if (!r.ok) return r;
+  return {
+    ok: true,
+    data: arr(r.data)
+      .map((p) => ({ ...mapPhoto(p), creatorName: str(p["creator_name"]) }))
+      .filter((p) => p.url),
+  };
+}

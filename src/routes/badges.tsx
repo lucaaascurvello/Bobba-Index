@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { formatNumber } from "@/lib/format";
 import { useHotel } from "@/lib/habbo/hotel-context";
 import { badgeImageUrl } from "@/lib/habbo/images";
-import { badgeCatalogQuery } from "@/lib/habbo/queries";
+import { badgeCatalogQuery, badgeOwnersQuery } from "@/lib/habbo/queries";
 import type { CatalogBadge } from "@/lib/habbo/types";
 
 const searchSchema = z.object({
@@ -139,11 +139,24 @@ function BadgesPage() {
               </DialogHeader>
               <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
                 <dt className="text-muted-foreground">Código</dt><dd className="font-mono text-foreground">{selected.code}</dd>
+                <Owners hotel={hotel} code={selected.code} />
               </dl>
             </>
           )}
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+function Owners({ hotel, code }: { hotel: string; code: string }) {
+  const q = useQuery(badgeOwnersQuery(hotel, code));
+  return (
+    <>
+      <dt className="text-muted-foreground">Donos</dt>
+      <dd className="text-foreground">
+        {q.isPending ? <span className="inline-block h-4 w-16 animate-pulse rounded bg-surface" /> : q.isError ? <span className="text-muted-foreground">Indisponível</span> : q.data.ownerCount != null ? `${formatNumber(q.data.ownerCount)} jogadores` : <span className="text-muted-foreground">Indisponível</span>}
+      </dd>
+    </>
   );
 }
