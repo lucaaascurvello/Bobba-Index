@@ -225,7 +225,7 @@
   animation: bobba-float 9s ease-in-out infinite;
 }
 @utility animate-halo {
-  background: radial-gradient(closest-side, color-mix(in oklab, var(--primary) 40%, transparent), transparent 72%);
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--primary) 55%, transparent), transparent 70%);
   animation: bobba-halo 11s ease-in-out infinite;
 }
 @utility stagger {
