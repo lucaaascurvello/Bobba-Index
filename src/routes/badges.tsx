@@ -45,7 +45,7 @@ function BadgesPage() {
   const { q = "", type = "all", page = 1 } = Route.useSearch();
   const navigate = useNavigate({ from: "/badges" });
   const { hotel } = useHotel();
-  const { t, num } = useI18n();
+  const { t, num, date } = useI18n();
   const [input, setInput] = useState(q);
   const [selected, setSelected] = useState<CatalogBadge | null>(null);
 
@@ -90,8 +90,9 @@ function BadgesPage() {
         </div>
       </div>
 
-      <div className="mt-4 h-5 text-xs text-muted-foreground">
+      <div className="mt-4 min-h-5 text-xs text-muted-foreground">
         {data && t("countOf", { a: num(data.total), b: num(data.catalogSize) })}
+        {data?.snapshotAt && <span className="ml-2 text-primary/80">· {t("catalogSnapshot", { date: date(data.snapshotAt) })}</span>}
       </div>
 
       <div className="mt-3">
