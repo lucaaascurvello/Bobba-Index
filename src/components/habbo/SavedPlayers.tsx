@@ -31,7 +31,7 @@ export function SavedPlayers() {
     <div className="mb-10 space-y-6">
       {fav.items.length > 0 && (
         <div>
-          <h2 className="mb-3 flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground"><Star className="h-3.5 w-3.5 text-warning" /> Favoritos</h2>
+          <h2 className="mb-3 flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground"><Star className="h-3.5 w-3.5 text-primary-soft" /> Favoritos</h2>
           <ul className="flex flex-wrap gap-2">{fav.items.map((p) => <Chip key={p.hotel + p.name} p={p} onRemove={() => fav.remove(p.hotel, p.name)} />)}</ul>
         </div>
       )}

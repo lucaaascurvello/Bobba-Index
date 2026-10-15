@@ -6,6 +6,8 @@ import { z } from "zod";
 
 import { PixelScene } from "@/components/brand/PixelScene";
 import { PlayerCard, PlayerCardSkeleton } from "@/components/habbo/PlayerCard";
+import { SavedPlayers } from "@/components/habbo/SavedPlayers";
+import { useRecentSearches } from "@/lib/local-store";
 import { ErrorPanel, StatePanel } from "@/components/states/StatePanel";
 import { useHotel } from "@/lib/habbo/hotel-context";
 import { getHotel } from "@/lib/habbo/hotels";
@@ -32,6 +34,13 @@ function HabbosPage() {
   const [touched, setTouched] = useState(false);
 
   useEffect(() => setValue(q ?? ""), [q]);
+  const recentPlaceholder = null; void recentPlaceholder;
+  const recent = useRecentSearches();
+  const found = query.data;
+  useEffect(() => {
+    if (found) recent.add({ hotel: found.hotel, name: found.name, figure: found.figureString });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [found?.uniqueId]);
 
   const term = q?.trim() ?? "";
   const query = useQuery({ ...userByNameQuery(hotel, term), enabled: term.length > 0 });
