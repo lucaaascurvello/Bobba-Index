@@ -1,5 +1,5 @@
-# Ajustes da busca e hotéis
-- [x] Usar a imagem enviada em Como funciona e destacar Saiba mais sobre os dados.
-- [x] Suavizar o brilho principal e remover o selo Habbo Brasil e o indicador de tema.
-- [x] Validar e habilitar outros hotéis compatíveis no seletor, com testes.
-- [x] Verificar a página e a busca em outro hotel.
+# Consulta recusada
+- [x] Verificar os registros e testar a busca brasileira.
+- [x] Restringir temporariamente ao Brasil em todas as consultas e atualizar os testes.
+- [x] Verificar a busca e o perfil do Brasil após a restrição.
+- [ ] Confirmar funcionamento na prévia hospedada: acesso de diagnóstico retornou 401; proteção do Habbo depende da origem.

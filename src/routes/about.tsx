@@ -52,7 +52,7 @@ function AboutPage() {
       <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
         <li>A API pública não oferece busca parcial nem listagem de jogadores — só o nick exato.</li>
         <li>Perfis privados mostram apenas avatar, missão e dados básicos.</li>
-        <li>Os hotéis disponíveis no seletor têm endpoints públicos validados; a disponibilidade pode variar conforme as proteções e o estado de cada hotel.</li>
+        <li>Temporariamente, apenas o Habbo Brasil está disponível. A proteção do Habbo pode recusar consultas, inclusive ao hotel brasileiro.</li>
         <li>O catálogo de emblemas não informa raridade, categorias ou data de lançamento.</li>
       </ul>
     </div>

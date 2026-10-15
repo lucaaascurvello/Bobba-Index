@@ -1,6 +1,28 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { mapUser, normalizeName, parseBadgeTexts } from "@/lib/habbo/api";
+import { fetchBadgeOwners, fetchCommunityPhotos, fetchPhotos, fetchProfile, fetchUserByName, mapUser, normalizeName, parseBadgeTexts, searchBadgeCatalog } from "@/lib/habbo/api";
+
+describe("Brazil-only API access", () => {
+  it("rejects disabled hotels on every public-data path without network calls", async () => {
+    const network = vi.spyOn(globalThis, "fetch");
+    try {
+      const results = await Promise.all([
+        fetchUserByName("com", "Bobba"),
+        fetchProfile("com", "hhus-123"),
+        fetchPhotos("com", "hhus-123"),
+        fetchBadgeOwners("com", "ACH_Login1"),
+        fetchCommunityPhotos("com"),
+        searchBadgeCatalog("com", { q: "", prefix: "all", page: 1, pageSize: 60 }),
+      ]);
+      for (const result of results) {
+        expect(result).toMatchObject({ ok: false, error: { kind: "unsupported_hotel" } });
+      }
+      expect(network).not.toHaveBeenCalled();
+    } finally {
+      network.mockRestore();
+    }
+  });
+});
 
 describe("habbo service", () => {
   it("rejects empty nick", () => {

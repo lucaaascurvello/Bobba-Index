@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 
-import { DEFAULT_HOTEL, type HotelId } from "./hotels";
+import { DEFAULT_HOTEL, isSupportedHotel, type HotelId } from "./hotels";
 
 const HotelContext = createContext<{ hotel: HotelId; setHotel: (h: HotelId) => void }>({
   hotel: DEFAULT_HOTEL,
@@ -8,7 +8,8 @@ const HotelContext = createContext<{ hotel: HotelId; setHotel: (h: HotelId) => v
 });
 
 export function HotelProvider({ children }: { children: ReactNode }) {
-  const [hotel, setHotel] = useState<HotelId>(DEFAULT_HOTEL);
+  const [hotel, updateHotel] = useState<HotelId>(DEFAULT_HOTEL);
+  const setHotel = (next: HotelId) => updateHotel(isSupportedHotel(next) ? next : DEFAULT_HOTEL);
   return <HotelContext.Provider value={{ hotel, setHotel }}>{children}</HotelContext.Provider>;
 }
 
