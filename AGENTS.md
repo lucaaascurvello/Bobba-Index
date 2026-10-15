@@ -14,3 +14,4 @@
 - Server functions return `ApiResult` objects instead of throwing; `queries.ts` converts failures to `HabboError` so components can branch on `kind`.
 - Hotels are configured in `src/lib/habbo/hotels.ts`; only enable a hotel after its endpoints are validated.
 - Never render mock/demo player data; missing API fields map to null and show "indisponível".
+- Device-only data (recent searches, favorites) lives in `src/lib/local-store.ts` via localStorage, read after hydration — no cloud backend needed for these.
