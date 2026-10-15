@@ -24,7 +24,7 @@ function HotelSelect() {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        {HOTELS.map((h) => (
+        {HOTELS.filter((h) => h.enabled).map((h) => (
           <SelectItem key={h.id} value={h.id} disabled={!h.enabled}>
             {h.name}
             {!h.enabled && <span className="ml-2 text-xs text-muted-foreground">em breve</span>}
