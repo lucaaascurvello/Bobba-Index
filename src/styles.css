@@ -191,6 +191,10 @@
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
 }
+@keyframes bobba-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
 @keyframes bobba-shimmer {
   from { transform: translateX(-100%); }
   to { transform: translateX(100%); }
@@ -201,6 +205,9 @@
 }
 @utility animate-page-in {
   animation: bobba-page-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-marquee {
+  animation: bobba-marquee 30s linear infinite;
 }
 @utility animate-fill {
   transform-origin: left;
