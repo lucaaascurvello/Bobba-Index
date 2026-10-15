@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Award, Camera, Globe, Info, Menu, Moon, Users } from "lucide-react";
+import { Award, Camera, Globe, Info, Menu, Users } from "lucide-react";
 import { useState } from "react";
 
 import { Logo } from "@/components/brand/Logo";
@@ -57,13 +57,6 @@ export function SiteHeader() {
         </nav>
         <div className="ml-auto hidden items-center gap-3 md:flex">
           <HotelSelect />
-          <span
-            className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-surface text-primary-soft"
-            title="Tema escuro ativo"
-            aria-label="Tema escuro ativo"
-          >
-            <Moon className="h-4 w-4" />
-          </span>
         </div>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger

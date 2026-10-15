@@ -1,4 +1,5 @@
-# Identidade Bobba Index
-- [x] Aplicar Habbo Gold aos destaques e preservar contraste no tema escuro.
-- [x] Substituir o B pela matriz exata 9x9 da caveira enviada, com brilho opcional.
-- [x] Verificar o logo e as cores no site.
+# Ajustes da busca e hotéis
+- [ ] Usar a imagem enviada em Como funciona e destacar Saiba mais sobre os dados.
+- [ ] Suavizar o brilho principal e remover o selo Habbo Brasil e o indicador de tema.
+- [ ] Validar e habilitar outros hotéis compatíveis no seletor, com testes.
+- [ ] Verificar a página e a busca em outro hotel.
