@@ -14,3 +14,7 @@
 - [x] Seção do desenvolvedor na Sobre (foto, LinkedIn, GitHub, cafézinho Pix) — 2026-10-15
 
 - [x] Carrossel infinito de hotéis com bandeiras abaixo do "Como funciona" em /habbos — 2026-10-15
+
+## Efeito na ilustração do "Como funciona"
+- [x] Flutuação suave (sobe e desce ~10px) com brilho dourado respirando ao redor do desenho.
+- [x] Verificar animação, console, sem overflow horizontal e testes.
