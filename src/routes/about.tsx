@@ -24,6 +24,12 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   const { t } = useI18n();
+  const [copied, setCopied] = useState(false);
+  const copyPix = () => {
+    navigator.clipboard?.writeText(PIX_CODE).catch(() => {});
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 2500);
+  };
   const SOURCES = [
     [t("src1"), "/api/public/users?name={nick}", t("src1n")],
     [t("src2"), "/api/public/users/{id}/profile", t("src2n")],
