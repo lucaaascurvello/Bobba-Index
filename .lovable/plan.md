@@ -20,10 +20,10 @@ Vamos fazer o mesmo, de forma honesta:
 
 **Página Sobre**: nova explicação de como o histórico é registrado e seus limites.
 
-## Privacidade
-- Guardamos apenas dados que a API já mostra publicamente (look, missão, lista de amigos pública).
-- Perfis privados não geram histórico de amigos.
-- Nada de dados pessoais de quem pesquisa.
+## Sem seção de privacidade
+- Não haverá aviso nem seção de privacidade na interface: mostramos tudo o que foi registrado do jogador.
+- Limite técnico (não é escolha): o histórico só existe a partir das consultas feitas no Bobba Index. Perfis privados não mostram amigos na API, então não há como registrar amigos deles.
+
 
 ## Detalhes técnicos
 - Ativar Lovable Cloud (banco de dados).
