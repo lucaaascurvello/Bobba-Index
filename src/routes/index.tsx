@@ -10,6 +10,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Pesquise jogadores e emblemas do Habbo Brasil." },
       { property: "og:title", content: "Bobba Index" },
       { property: "og:description", content: "O universo Habbo, indexado." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });
