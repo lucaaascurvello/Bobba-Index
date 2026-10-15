@@ -25,7 +25,7 @@ export const Route = createFileRoute("/badges")({
   head: () => ({
     meta: [
       { title: "Emblemas — Bobba Index" },
-      { name: "description", content: "Pesquise emblemas do Habbo Brasil por nome ou código, com imagem e descrição oficiais." },
+      { name: "description", content: "Pesquise emblemas do hotel Habbo selecionado por nome ou código, com imagem e descrição oficiais." },
       { property: "og:title", content: "Explorador de emblemas — Bobba Index" },
       { property: "og:description", content: "Milhares de emblemas do Habbo, indexados." },
       { property: "og:type", content: "website" },

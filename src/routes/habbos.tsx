@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Award, CornerDownLeft, Info, Loader2, Search, SearchX } from "lucide-react";
+import { ArrowUpRight, CornerDownLeft, Info, Loader2, Search, SearchX } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { z } from "zod";
 
-import { PixelScene } from "@/components/brand/PixelScene";
+import hotelImage from "@/assets/habbo-hotel.png.asset.json";
+import { Button } from "@/components/ui/button";
 import { PlayerCard, PlayerCardSkeleton } from "@/components/habbo/PlayerCard";
 import { SavedPlayers } from "@/components/habbo/SavedPlayers";
 import { useRecentSearches } from "@/lib/local-store";
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/habbos")({
   head: () => ({
     meta: [
       { title: "Habbos — Bobba Index" },
-      { name: "description", content: "Pesquise jogadores do Habbo Brasil pelo nick e veja avatar, missão e perfil público." },
+      { name: "description", content: "Pesquise jogadores dos hotéis Habbo pelo nick e veja avatar, missão e perfil público." },
       { property: "og:title", content: "Explore o universo Habbo — Bobba Index" },
       { property: "og:description", content: "Jogadores, emblemas e histórias em um só lugar." },
       { property: "og:type", content: "website" },
@@ -61,12 +62,8 @@ function HabbosPage() {
     <div>
       <section className="relative overflow-hidden border-b border-border/60">
         <div className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" aria-hidden />
-        <div className="pointer-events-none absolute left-1/2 top-0 h-72 w-[42rem] -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" aria-hidden />
         <div className="relative mx-auto max-w-3xl px-4 pb-16 pt-20 text-center sm:px-6 sm:pt-28">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/80 px-3 py-1 font-pixel text-[11px] uppercase tracking-wide text-muted-foreground">
-            <span className="h-1.5 w-1.5 bg-success" /> {getHotel(hotel)?.name}
-          </span>
-          <h1 className="mt-6 font-display text-4xl font-semibold tracking-tight text-foreground sm:text-6xl">
+          <h1 className="font-display text-4xl font-semibold text-foreground sm:text-6xl">
             Explore o universo <span className="text-primary-soft">Habbo.</span>
           </h1>
           <p className="mt-4 text-base text-muted-foreground sm:text-lg">Jogadores, emblemas e histórias em um só lugar.</p>
@@ -74,7 +71,7 @@ function HabbosPage() {
           <form onSubmit={submit} role="search" className="mx-auto mt-10 max-w-2xl" noValidate>
             <label htmlFor="nick" className="sr-only">Nick do jogador</label>
             <div
-              className={`flex items-center gap-2 rounded-2xl border bg-card p-2 shadow-glow transition-colors focus-within:border-primary/70 ${emptyError ? "border-destructive/70" : "border-border"}`}
+              className={`flex items-center gap-2 rounded-2xl border bg-card p-2 shadow-sm transition-colors focus-within:border-primary/50 ${emptyError ? "border-destructive/70" : "border-border"}`}
             >
               <Search className="ml-3 h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
               <input
@@ -92,14 +89,14 @@ function HabbosPage() {
               <kbd className="hidden items-center gap-1 rounded border border-border px-2 py-1 text-[11px] text-muted-foreground sm:flex">
                 <CornerDownLeft className="h-3 w-3" /> Enter
               </kbd>
-              <button
+              <Button
                 type="submit"
                 disabled={loading}
                 className="flex h-12 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-70"
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
                 <span className="hidden sm:inline">{loading ? "Buscando" : "Pesquisar"}</span>
-              </button>
+              </Button>
             </div>
             <p id="nick-help" className={`mt-3 text-xs ${emptyError ? "text-destructive" : "text-muted-foreground"}`}>
               {emptyError
@@ -136,7 +133,7 @@ function HabbosPage() {
 
 function InitialState() {
   return (
-    <div className="grid items-center gap-10 md:grid-cols-[1fr_auto]">
+    <div className="grid items-center gap-10 md:grid-cols-[1fr_240px]">
       <div className="space-y-4">
         <h2 className="font-display text-xl font-semibold text-foreground">Como funciona</h2>
         <ol className="space-y-3 text-sm text-muted-foreground">
@@ -152,15 +149,16 @@ function InitialState() {
           ))}
         </ol>
         <div className="flex flex-wrap gap-2 pt-2">
-          <Link to="/badges" className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground hover:border-primary/50">
-            <Award className="h-4 w-4 text-primary-soft" /> Explorar emblemas
-          </Link>
-          <Link to="/about" className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground hover:border-primary/50">
-            <Info className="h-4 w-4 text-primary-soft" /> Sobre os dados
-          </Link>
+          <Button asChild className="h-auto min-h-10 whitespace-normal py-3">
+            <Link to="/about">
+              <Info /> Saiba mais sobre os dados <ArrowUpRight />
+            </Link>
+          </Button>
         </div>
       </div>
-      <div className="hidden justify-center md:flex"><PixelScene /></div>
+      <div className="flex justify-center">
+        <img src={hotelImage.url} alt="Hotel Habbo em pixel art, com piscinas e terraços" width={348} height={440} className="pixelated h-auto w-60 max-w-full" loading="lazy" />
+      </div>
     </div>
   );
 }
