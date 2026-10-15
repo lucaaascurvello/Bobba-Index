@@ -10,12 +10,12 @@ import { ErrorPanel, StatePanel } from "@/components/states/StatePanel";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { formatAccountAge, formatDate, formatNumber } from "@/lib/format";
 import { useFavorites } from "@/lib/local-store";
 import { getHotel, isSupportedHotel } from "@/lib/habbo/hotels";
 import { avatarUrl, badgeImageUrl, groupBadgeUrl } from "@/lib/habbo/images";
 import { HabboError, photosQuery, profileQuery, userByNameQuery } from "@/lib/habbo/queries";
 import type { HabboBadge, HabboProfile, HabboUser } from "@/lib/habbo/types";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/habbo/$hotel/$username")({
   head: ({ params }) => ({
@@ -34,6 +34,7 @@ export const Route = createFileRoute("/habbo/$hotel/$username")({
 function ProfilePage() {
   const { hotel, username } = Route.useParams();
   const router = useRouter();
+  const { t } = useI18n();
   const supported = isSupportedHotel(hotel);
   const userQ = useQuery({ ...userByNameQuery(hotel, username), enabled: supported });
   const user = userQ.data;
@@ -47,19 +48,19 @@ function ProfilePage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <button onClick={back} className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-4 w-4" /> Voltar aos resultados
+        <ArrowLeft className="h-4 w-4" /> {t("back")}
       </button>
 
       {!supported ? (
-        <StatePanel title="Hotel não suportado" description={`O hotel “${hotel}” ainda não está disponível no Bobba Index.`} />
+        <StatePanel title={t("errUnsupported")} description={t("unsupportedDesc", { hotel })} />
       ) : userQ.isPending ? (
         <HeaderSkeleton />
       ) : userQ.isError ? (
         userQ.error instanceof HabboError && userQ.error.kind === "not_found" ? (
           <StatePanel
-            title="Perfil inexistente"
-            description={`Nenhum jogador chamado “${username}” em ${getHotel(hotel)?.name}.`}
-            action={<Button asChild variant="outline"><Link to="/habbos">Nova pesquisa</Link></Button>}
+            title={t("noProfile")}
+            description={t("noProfileDesc", { name: username, hotel: getHotel(hotel)?.name ?? hotel })}
+            action={<Button asChild variant="outline"><Link to="/habbos">{t("newSearch")}</Link></Button>}
           />
         ) : (
           <ErrorPanel error={userQ.error} onRetry={() => userQ.refetch()} />
@@ -75,13 +76,14 @@ function ProfilePage() {
 }
 
 function ProfileHeader({ user }: { user: HabboUser }) {
-  const since = formatDate(user.memberSince);
+  const { t, date, age } = useI18n();
+  const since = date(user.memberSince);
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      toast.success("Link do perfil copiado");
+      toast.success(t("copied"));
     } catch {
-      toast.error("Não foi possível copiar o link");
+      toast.error(t("copyFail"));
     }
   };
   return (
@@ -93,11 +95,11 @@ function ProfileHeader({ user }: { user: HabboUser }) {
             <span title={user.online ? "Online" : "Offline"} className={`absolute right-2 top-2 h-3.5 w-3.5 rounded-full border-2 border-card ${user.online ? "bg-success shadow-[0_0_10px_var(--color-success)]" : "bg-muted-foreground/50"}`} />
           )}
           {user.currentLevel != null && (
-            <span className="absolute left-2 top-2 rounded-md bg-primary px-1.5 py-0.5 font-pixel text-[10px] text-primary-foreground">Nv {user.currentLevel}</span>
+            <span className="absolute left-2 top-2 rounded-md bg-primary px-1.5 py-0.5 font-pixel text-[10px] text-primary-foreground">{t("levelShort")} {user.currentLevel}</span>
           )}
           <HabboImage
             src={avatarUrl(user.hotel, { figure: user.figureString, name: user.name, size: "l" })}
-            alt={`Avatar de ${user.name}`}
+            alt={t("avatarOf", { name: user.name })}
             width={64 * 1.5}
             height={110 * 1.25}
             eager
@@ -115,17 +117,17 @@ function ProfileHeader({ user }: { user: HabboUser }) {
               </span>
             )}
           </div>
-          <p className="mt-2 text-muted-foreground">{user.motto ?? <span className="italic opacity-70">Sem missão pública</span>}</p>
+          <p className="mt-2 text-muted-foreground">{user.motto ?? <span className="italic opacity-70">{t("noMotto")}</span>}</p>
           <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5"><Home className="h-4 w-4" />{getHotel(user.hotel)?.name}</span>
-            <span className="flex items-center gap-1.5"><CalendarDays className="h-4 w-4" />{since ? `Membro desde ${since}` : "Registro indisponível"}</span>
-            {formatAccountAge(user.memberSince) && <span className="flex items-center gap-1.5"><Hourglass className="h-4 w-4" />{formatAccountAge(user.memberSince)}</span>}
-            {!user.profileVisible && <span className="flex items-center gap-1.5"><Lock className="h-4 w-4" />Perfil privado</span>}
+            <span className="flex items-center gap-1.5"><CalendarDays className="h-4 w-4" />{since ? t("memberSince", { date: since }) : t("regUnavailable")}</span>
+            {age(user.memberSince) && <span className="flex items-center gap-1.5"><Hourglass className="h-4 w-4" />{age(user.memberSince)}</span>}
+            {!user.profileVisible && <span className="flex items-center gap-1.5"><Lock className="h-4 w-4" />{t("privateProfile")}</span>}
           </div>
         </div>
         <div className="flex shrink-0 gap-2">
           <FavButton user={user} />
-          <Button variant="outline" onClick={copy}><Link2 className="h-4 w-4" /> Copiar link</Button>
+          <Button variant="outline" onClick={copy}><Link2 className="h-4 w-4" /> {t("copyLink")}</Button>
         </div>
       </div>
     </section>
@@ -133,13 +135,15 @@ function ProfileHeader({ user }: { user: HabboUser }) {
 }
 
 function HeaderSkeleton() {
-  return <div className="h-[214px] animate-pulse rounded-2xl border border-border bg-card" aria-label="Carregando perfil" />;
+  const { t } = useI18n();
+  return <div className="h-[214px] animate-pulse rounded-2xl border border-border bg-card" aria-label={t("loading")} />;
 }
 
 function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser; profile: HabboProfile | undefined; loading: boolean; error: unknown; retry: () => void }) {
+  const { t } = useI18n();
   const section = (render: (p: HabboProfile) => ReactNode) => {
     if (!user.profileVisible || (error instanceof HabboError && error.kind === "private"))
-      return <StatePanel icon={Lock} title="Perfil privado" description="Este jogador ocultou o perfil. A API pública não fornece estes dados." />;
+      return <StatePanel icon={Lock} title={t("privateProfile")} description={t("privateDesc")} />;
     if (loading) return <GridSkeleton />;
     if (error) return <ErrorPanel error={error} onRetry={retry} />;
     if (!profile) return null;
@@ -149,13 +153,13 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
   return (
     <Tabs defaultValue="overview" className="mt-8">
       <TabsList className="h-auto w-full justify-start overflow-x-auto bg-surface p-1">
-        <TabsTrigger value="overview">Visão geral</TabsTrigger>
-        <TabsTrigger value="badges">Emblemas{count(profile?.badges?.length)}</TabsTrigger>
-        <TabsTrigger value="groups">Grupos{count(profile?.groups?.length)}</TabsTrigger>
-        <TabsTrigger value="rooms">Quartos{count(profile?.rooms?.length)}</TabsTrigger>
-        <TabsTrigger value="friends">Amigos{count(profile?.friends?.length)}</TabsTrigger>
-        <TabsTrigger value="achievements">Conquistas{count(profile?.badges?.filter((b) => b.code.startsWith("ACH_")).length)}</TabsTrigger>
-        <TabsTrigger value="photos">Fotos</TabsTrigger>
+        <TabsTrigger value="overview">{t("tabOverview")}</TabsTrigger>
+        <TabsTrigger value="badges">{t("tabBadges")}{count(profile?.badges?.length)}</TabsTrigger>
+        <TabsTrigger value="groups">{t("tabGroups")}{count(profile?.groups?.length)}</TabsTrigger>
+        <TabsTrigger value="rooms">{t("tabRooms")}{count(profile?.rooms?.length)}</TabsTrigger>
+        <TabsTrigger value="friends">{t("tabFriends")}{count(profile?.friends?.length)}</TabsTrigger>
+        <TabsTrigger value="achievements">{t("tabAch")}{count(profile?.badges?.filter((b) => b.code.startsWith("ACH_")).length)}</TabsTrigger>
+        <TabsTrigger value="photos">{t("tabPhotos")}</TabsTrigger>
       </TabsList>
 
       <TabsContent value="overview" className="mt-6 space-y-6">
@@ -164,11 +168,11 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
 
       <TabsContent value="badges" className="mt-6">
         {section((p) =>
-          !p.badges ? <Unavailable what="emblemas" /> : p.badges.length === 0 ? (
-            <StatePanel icon={Award} title="Sem emblemas" description="A API não retornou emblemas para este jogador." />
+          !p.badges ? <Unavailable /> : p.badges.length === 0 ? (
+            <StatePanel icon={Award} title={t("noBadges")} description={t("noBadgesDesc")} />
           ) : (
             <>
-              <p className="mb-4 text-xs text-muted-foreground">Coleção pública de emblemas retornada pelo perfil.</p>
+              <p className="mb-4 text-xs text-muted-foreground">{t("badgesNote")}</p>
               <BadgeGrid badges={p.badges} />
             </>
           ),
@@ -177,21 +181,21 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
 
       <TabsContent value="groups" className="mt-6">
         {section((p) =>
-          !p.groups ? <Unavailable what="grupos" /> : p.groups.length === 0 ? (
-            <StatePanel icon={Users} title="Nenhum grupo" description="Este jogador não participa de grupos públicos." />
+          !p.groups ? <Unavailable /> : p.groups.length === 0 ? (
+            <StatePanel icon={Users} title={t("noGroups")} description={t("noGroupsDesc")} />
           ) : (
             <div className="stagger grid gap-3 sm:grid-cols-2">
               {p.groups.map((g) => (
                 <div key={g.id} className="lift flex gap-4 rounded-xl border border-border bg-card p-4">
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-surface">
-                    {g.badgeCode ? <HabboImage src={groupBadgeUrl(user.hotel, g.badgeCode)} alt={`Emblema do grupo ${g.name}`} width={39} height={39} /> : <Users className="h-5 w-5 text-muted-foreground" />}
+                    {g.badgeCode ? <HabboImage src={groupBadgeUrl(user.hotel, g.badgeCode)} alt={t("groupBadge", { name: g.name })} width={39} height={39} /> : <Users className="h-5 w-5 text-muted-foreground" />}
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <h3 className="truncate font-medium text-foreground">{g.name}</h3>
-                      {g.isAdmin && <span className="flex items-center gap-1 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] font-medium text-primary-soft"><Crown className="h-3 w-3" />Admin / dono</span>}
+                      {g.isAdmin && <span className="flex items-center gap-1 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] font-medium text-primary-soft"><Crown className="h-3 w-3" />{t("admin")}</span>}
                     </div>
-                    <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">{g.description ?? <span className="italic opacity-70">Sem descrição</span>}</p>
+                    <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">{g.description ?? <span className="italic opacity-70">{t("noDesc")}</span>}</p>
                     {g.type && <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground/70">{g.type.toLowerCase()}</p>}
                   </div>
                 </div>
@@ -203,8 +207,8 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
 
       <TabsContent value="rooms" className="mt-6">
         {section((p) =>
-          !p.rooms ? <Unavailable what="quartos" /> : p.rooms.length === 0 ? (
-            <StatePanel icon={Home} title="Nenhum quarto público" description="A API não retornou quartos deste jogador." />
+          !p.rooms ? <Unavailable /> : p.rooms.length === 0 ? (
+            <StatePanel icon={Home} title={t("noRooms")} description={t("noRoomsDesc")} />
           ) : (
             <RoomList hotel={user.hotel} rooms={p.rooms} />
           ),
@@ -213,8 +217,8 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
 
       <TabsContent value="friends" className="mt-6">
         {section((p) =>
-          !p.friends ? <Unavailable what="amigos" /> : p.friends.length === 0 ? (
-            <StatePanel icon={Users} title="Nenhum amigo público" description="A API não retornou amigos deste jogador." />
+          !p.friends ? <Unavailable /> : p.friends.length === 0 ? (
+            <StatePanel icon={Users} title={t("noFriends")} description={t("noFriendsDesc")} />
           ) : (
             <ul className="stagger grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {p.friends.map((f) => <FriendCard key={f.uniqueId} hotel={user.hotel} friend={f} />)}
@@ -227,10 +231,10 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
         {section((p) => {
           const ach = (p.badges ?? []).filter((b) => b.code.startsWith("ACH_"));
           return ach.length === 0 ? (
-            <StatePanel icon={Trophy} title="Sem conquistas" description="Nenhum emblema de conquista (ACH_) na coleção pública." />
+            <StatePanel icon={Trophy} title={t("noAch")} description={t("noAchDesc")} />
           ) : (
             <>
-              <p className="mb-4 text-xs text-muted-foreground">Emblemas de conquista encontrados na coleção pública.</p>
+              <p className="mb-4 text-xs text-muted-foreground">{t("achNote")}</p>
               <BadgeGrid badges={ach} />
             </>
           );
@@ -245,12 +249,13 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
 }
 
 function Overview({ user }: { user: HabboUser }) {
+  const { t, date, num, age } = useI18n();
   const stats: { label: string; value: string | null; icon: typeof Star }[] = [
-    { label: "Experiência total", value: user.totalExperience != null ? formatNumber(user.totalExperience) : null, icon: Star },
-    { label: "Estrelas de cristal", value: user.starGemCount != null ? formatNumber(user.starGemCount) : null, icon: Gem },
-    { label: "Membro desde", value: formatDate(user.memberSince), icon: CalendarDays },
-    { label: "Idade da conta", value: formatAccountAge(user.memberSince), icon: Hourglass },
-    { label: "Último acesso", value: formatDate(user.lastAccessTime, true), icon: Clock },
+    { label: t("statXp"), value: user.totalExperience != null ? num(user.totalExperience) : null, icon: Star },
+    { label: t("statGems"), value: user.starGemCount != null ? num(user.starGemCount) : null, icon: Gem },
+    { label: t("statSince"), value: date(user.memberSince), icon: CalendarDays },
+    { label: t("statAge"), value: age(user.memberSince), icon: Hourglass },
+    { label: t("statLast"), value: date(user.lastAccessTime, true), icon: Clock },
   ];
   const pct = user.currentLevelCompletePercent;
   return (
@@ -258,13 +263,13 @@ function Overview({ user }: { user: HabboUser }) {
       <div className="rounded-xl border border-border bg-card p-5">
         <div className="flex items-center gap-4">
           <span className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <span className="text-[10px] uppercase opacity-80">Nível</span>
+            <span className="text-[10px] uppercase opacity-80">{t("level")}</span>
             <span className="font-display text-xl font-bold leading-none">{user.currentLevel ?? "?"}</span>
           </span>
           <div className="min-w-0 flex-1">
             <div className="flex justify-between text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" />Progresso até o nível {user.currentLevel != null ? user.currentLevel + 1 : "seguinte"}</span>
-              <span className="font-medium text-foreground">{pct != null ? `${pct}%` : "Indisponível"}</span>
+              <span className="flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" />{t("progressTo", { n: user.currentLevel != null ? user.currentLevel + 1 : t("nextLevel") })}</span>
+              <span className="font-medium text-foreground">{pct != null ? `${pct}%` : t("unavailable")}</span>
             </div>
             <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-surface" role="progressbar" aria-valuenow={pct ?? 0} aria-valuemin={0} aria-valuemax={100}>
               <div className="shimmer animate-fill h-full rounded-full bg-gradient-to-r from-primary to-primary-soft" style={{ width: `${Math.min(100, Math.max(0, pct ?? 0))}%` }} />
@@ -276,15 +281,15 @@ function Overview({ user }: { user: HabboUser }) {
         {stats.map((s) => (
           <div key={s.label} className="lift rounded-xl border border-border bg-card p-4">
             <p className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-muted-foreground"><s.icon className="h-3.5 w-3.5" />{s.label}</p>
-            <p className={`mt-2 font-display text-xl font-semibold ${s.value ? "text-foreground" : "text-muted-foreground/60"}`}>{s.value ?? "Indisponível"}</p>
+            <p className={`mt-2 font-display text-xl font-semibold ${s.value ? "text-foreground" : "text-muted-foreground/60"}`}>{s.value ?? t("unavailable")}</p>
           </div>
         ))}
       </div>
       <div>
-        <h2 className="mb-1 font-display text-base font-semibold text-foreground">Emblemas equipados</h2>
-        <p className="mb-4 text-xs text-muted-foreground">Os emblemas que o jogador escolheu exibir — não é a coleção completa.</p>
+        <h2 className="mb-1 font-display text-base font-semibold text-foreground">{t("equipped")}</h2>
+        <p className="mb-4 text-xs text-muted-foreground">{t("equippedNote")}</p>
         {user.selectedBadges.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">Nenhum emblema equipado.</p>
+          <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">{t("noEquipped")}</p>
         ) : (
           <BadgeGrid badges={user.selectedBadges} />
         )}
@@ -294,6 +299,7 @@ function Overview({ user }: { user: HabboUser }) {
 }
 
 function BadgeGrid({ badges }: { badges: HabboBadge[] }) {
+  const { t } = useI18n();
   return (
     <ul className="stagger grid grid-cols-[repeat(auto-fill,minmax(72px,1fr))] gap-2">
       {badges.map((b) => (
@@ -305,7 +311,7 @@ function BadgeGrid({ badges }: { badges: HabboBadge[] }) {
               </button>
             </TooltipTrigger>
             <TooltipContent className="max-w-60">
-              <p className="font-medium">{b.name ?? "Sem nome"}</p>
+              <p className="font-medium">{b.name ?? t("noName")}</p>
               {b.description && <p className="mt-0.5 text-xs opacity-80">{b.description}</p>}
               <p className="mt-1 font-mono text-[10px] opacity-60">{b.code}</p>
             </TooltipContent>
@@ -317,29 +323,32 @@ function BadgeGrid({ badges }: { badges: HabboBadge[] }) {
 }
 
 function GridSkeleton() {
+  const { t } = useI18n();
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(72px,1fr))] gap-2" aria-label="Carregando">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(72px,1fr))] gap-2" aria-label={t("loading")}>
       {Array.from({ length: 16 }).map((_, i) => <div key={i} className="aspect-square animate-pulse rounded-lg bg-card" />)}
     </div>
   );
 }
 
-const Unavailable = ({ what }: { what: string }) => (
-  <StatePanel title="Dados indisponíveis" description={`A fonte de dados não retornou ${what} para este perfil.`} />
-);
+function Unavailable() {
+  const { t } = useI18n();
+  return <StatePanel title={t("dataUnavailable")} description={t("dataUnavailableDesc")} />;
+}
 
 function Photos({ user }: { user: HabboUser }) {
+  const { t, date } = useI18n();
   const q = useQuery(photosQuery(user.hotel, user.uniqueId));
   if (q.isPending) return <GridSkeleton />;
   if (q.isError) return <ErrorPanel error={q.error} onRetry={() => q.refetch()} />;
-  if (q.data.length === 0) return <StatePanel icon={Camera} title="Nenhuma foto pública" description="Este jogador não tem fotos publicadas." />;
+  if (q.data.length === 0) return <StatePanel icon={Camera} title={t("noPhotos")} description={t("noPhotosDesc")} />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {q.data.map((p) => (
         <a key={p.id} href={p.url} target="_blank" rel="noreferrer" className="overflow-hidden rounded-xl border border-border bg-card lift">
-          <HabboImage src={p.previewUrl ?? p.url} alt={`Foto de ${user.name}`} className="aspect-[4/3] w-full bg-surface object-cover" />
+          <HabboImage src={p.previewUrl ?? p.url} alt={t("photoOf", { name: user.name })} className="aspect-[4/3] w-full bg-surface object-cover" />
           <div className="flex justify-between p-3 text-xs text-muted-foreground">
-            <span>{formatDate(p.takenAt) ?? "Data indisponível"}</span>
+            <span>{date(p.takenAt) ?? t("dateUnavailable")}</span>
             {p.likes != null && <span className="flex items-center gap-1"><Heart className="h-3 w-3" />{p.likes}</span>}
           </div>
         </a>
@@ -350,6 +359,7 @@ function Photos({ user }: { user: HabboUser }) {
 
 function FavButton({ user }: { user: HabboUser }) {
   const fav = useFavorites();
+  const { t } = useI18n();
   const on = fav.is(user.hotel, user.name);
   return (
     <Button
@@ -357,15 +367,16 @@ function FavButton({ user }: { user: HabboUser }) {
       aria-pressed={on}
       onClick={() => {
         fav.toggle({ hotel: user.hotel, name: user.name, figure: user.figureString });
-        toast.success(on ? "Removido dos favoritos" : "Adicionado aos favoritos");
+        toast.success(on ? t("favRemoved") : t("favAdded"));
       }}
     >
-      <Star className={`h-4 w-4 ${on ? "fill-primary-soft text-primary-soft" : ""}`} /> {on ? "Favorito" : "Favoritar"}
+      <Star className={`h-4 w-4 ${on ? "fill-primary-soft text-primary-soft" : ""}`} /> {on ? t("favorite") : t("favoriteAdd")}
     </Button>
   );
 }
 
 function RoomList({ hotel, rooms }: { hotel: string; rooms: HabboProfile["rooms"] & object }) {
+  const { t, date, num } = useI18n();
   const [tag, setTag] = useState<string | null>(null);
   const domain = getHotel(hotel)?.domain ?? "www.habbo.com.br";
   const shown = tag ? rooms.filter((r) => r.tags.includes(tag)) : rooms;
@@ -373,32 +384,32 @@ function RoomList({ hotel, rooms }: { hotel: string; rooms: HabboProfile["rooms"
     <>
       {tag && (
         <p className="mb-4 text-sm text-muted-foreground">
-          Filtrando por <span className="text-foreground">#{tag}</span> · <button className="text-primary-soft hover:underline" onClick={() => setTag(null)}>limpar</button>
+          {t("filtering")} <span className="text-foreground">#{tag}</span> · <button className="text-primary-soft hover:underline" onClick={() => setTag(null)}>{t("clearLower")}</button>
         </p>
       )}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {shown.map((r) => (
           <article key={String(r.id)} className="flex flex-col overflow-hidden rounded-xl border border-border bg-card">
             <div className="flex aspect-[110/110] max-h-44 w-full items-center justify-center bg-surface">
-              {r.thumbnailUrl ? <HabboImage src={r.thumbnailUrl} alt={`Miniatura do quarto ${r.name}`} className="h-full w-full object-cover" /> : <Home className="h-6 w-6 text-muted-foreground" />}
+              {r.thumbnailUrl ? <HabboImage src={r.thumbnailUrl} alt={t("roomThumb", { name: r.name })} className="h-full w-full object-cover" /> : <Home className="h-6 w-6 text-muted-foreground" />}
             </div>
             <div className="flex flex-1 flex-col p-4">
               <h3 className="truncate font-medium text-foreground">{r.name}</h3>
               {r.description && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{r.description}</p>}
               <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                <span className="flex items-center gap-1" title="Avaliação"><Star className="h-3 w-3 fill-primary-soft text-primary-soft" />{r.rating != null ? formatNumber(r.rating) : "—"}</span>
-                <span className="flex items-center gap-1" title="Capacidade máxima"><Users className="h-3 w-3" />{r.maximumVisitors != null ? `até ${r.maximumVisitors} visitantes` : "capacidade indisponível"}</span>
-                {formatDate(r.creationTime) && <span>Criado em {formatDate(r.creationTime)}</span>}
+                <span className="flex items-center gap-1" title={t("rating")}><Star className="h-3 w-3 fill-primary-soft text-primary-soft" />{r.rating != null ? num(r.rating) : "—"}</span>
+                <span className="flex items-center gap-1" title={t("capacity")}><Users className="h-3 w-3" />{r.maximumVisitors != null ? t("upTo", { n: r.maximumVisitors }) : t("capUnavailable")}</span>
+                {date(r.creationTime) && <span>{t("createdOn", { date: date(r.creationTime)! })}</span>}
               </div>
               {r.tags.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-1">
-                  {r.tags.map((t) => (
-                    <button key={t} onClick={() => setTag(t)} className={`rounded px-1.5 py-0.5 text-[11px] transition-colors ${tag === t ? "bg-primary/20 text-primary-soft" : "bg-surface text-muted-foreground hover:text-foreground"}`}>#{t}</button>
+                  {r.tags.map((tagName) => (
+                    <button key={tagName} onClick={() => setTag(tagName)} className={`rounded px-1.5 py-0.5 text-[11px] transition-colors ${tag === tagName ? "bg-primary/20 text-primary-soft" : "bg-surface text-muted-foreground hover:text-foreground"}`}>#{tagName}</button>
                   ))}
                 </div>
               )}
               <a href={`https://${domain}/room/${r.id}`} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-1.5 self-start text-sm font-medium text-primary-soft hover:underline">
-                Visitar no Habbo <ExternalLink className="h-3.5 w-3.5" />
+                {t("visit")} <ExternalLink className="h-3.5 w-3.5" />
               </a>
             </div>
           </article>
@@ -409,6 +420,7 @@ function RoomList({ hotel, rooms }: { hotel: string; rooms: HabboProfile["rooms"
 }
 
 function FriendCard({ hotel, friend: f }: { hotel: string; friend: NonNullable<HabboProfile["friends"]>[number] }) {
+  const { t } = useI18n();
   return (
     <li>
       <Link
@@ -421,7 +433,7 @@ function FriendCard({ hotel, friend: f }: { hotel: string; friend: NonNullable<H
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_70%,color-mix(in_oklab,var(--primary)_30%,transparent),transparent_65%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden />
           <HabboImage
             src={avatarUrl(hotel, { figure: f.figureString, name: f.name, size: "m" })}
-            alt={`Avatar de ${f.name}`}
+            alt={t("avatarOf", { name: f.name })}
             width={64}
             height={110}
             fallback="avatar"
@@ -430,7 +442,7 @@ function FriendCard({ hotel, friend: f }: { hotel: string; friend: NonNullable<H
         </div>
         <div className="flex flex-1 flex-col gap-1 border-t border-border p-3">
           <p className="truncate font-display text-sm font-semibold text-foreground transition-colors group-hover:text-primary-soft">{f.name}</p>
-          <p className="line-clamp-2 text-xs text-muted-foreground">{f.motto ?? <span className="italic opacity-70">Sem missão</span>}</p>
+          <p className="line-clamp-2 text-xs text-muted-foreground">{f.motto ?? <span className="italic opacity-70">{t("noMottoShort")}</span>}</p>
         </div>
       </Link>
     </li>

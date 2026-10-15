@@ -5,10 +5,10 @@ import { Camera, Heart, RefreshCw } from "lucide-react";
 import { HabboImage } from "@/components/habbo/HabboImage";
 import { ErrorPanel, StatePanel } from "@/components/states/StatePanel";
 import { Button } from "@/components/ui/button";
-import { formatDate } from "@/lib/format";
 import { useHotel } from "@/lib/habbo/hotel-context";
 import { getHotel } from "@/lib/habbo/hotels";
 import { communityPhotosQuery } from "@/lib/habbo/queries";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/fotos")({
   head: () => ({
@@ -26,16 +26,17 @@ export const Route = createFileRoute("/fotos")({
 
 function FotosPage() {
   const { hotel } = useHotel();
+  const { t, date } = useI18n();
   const q = useQuery(communityPhotosQuery(hotel));
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-semibold text-foreground">Fotos da comunidade</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Últimas fotos públicas tiradas em {getHotel(hotel)?.name}.</p>
+          <h1 className="font-display text-3xl font-semibold text-foreground">{t("photosTitle")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("photosSub", { hotel: getHotel(hotel)?.name ?? hotel })}</p>
         </div>
         <Button variant="outline" size="sm" onClick={() => q.refetch()} disabled={q.isFetching}>
-          <RefreshCw className={`h-4 w-4 ${q.isFetching ? "animate-spin" : ""}`} /> Atualizar
+          <RefreshCw className={`h-4 w-4 ${q.isFetching ? "animate-spin" : ""}`} /> {t("refresh")}
         </Button>
       </div>
       <div className="mt-8">
@@ -46,20 +47,20 @@ function FotosPage() {
         ) : q.isError ? (
           <ErrorPanel error={q.error} onRetry={() => q.refetch()} />
         ) : q.data.length === 0 ? (
-          <StatePanel icon={Camera} title="Nenhuma foto" description="A API não retornou fotos no momento." />
+          <StatePanel icon={Camera} title={t("noPhotosFeed")} description={t("noPhotosFeedDesc")} />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {q.data.map((p) => (
               <article key={p.id} className="overflow-hidden rounded-xl border border-border bg-card">
                 <a href={p.url} target="_blank" rel="noreferrer">
-                  <HabboImage src={p.previewUrl ?? p.url} alt={`Foto de ${p.creatorName ?? "jogador"}`} className="aspect-[4/3] w-full bg-surface object-cover" />
+                  <HabboImage src={p.previewUrl ?? p.url} alt={t("photoOf", { name: p.creatorName ?? t("player") })} className="aspect-[4/3] w-full bg-surface object-cover" />
                 </a>
                 <div className="flex items-center justify-between gap-2 p-3 text-xs text-muted-foreground">
                   {p.creatorName ? (
                     <Link to="/habbo/$hotel/$username" params={{ hotel, username: p.creatorName }} className="truncate font-medium text-foreground hover:text-primary-soft">{p.creatorName}</Link>
-                  ) : <span>Autor indisponível</span>}
+                  ) : <span>{t("authorUnavailable")}</span>}
                   <span className="flex shrink-0 items-center gap-3">
-                    {formatDate(p.takenAt, true) ?? "Data indisponível"}
+                    {date(p.takenAt, true) ?? t("dateUnavailable")}
                     {p.likes != null && <span className="flex items-center gap-1"><Heart className="h-3 w-3" />{p.likes}</span>}
                   </span>
                 </div>
