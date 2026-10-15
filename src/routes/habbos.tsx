@@ -21,6 +21,8 @@ export const Route = createFileRoute("/habbos")({
       { name: "description", content: "Pesquise jogadores do Habbo Brasil pelo nick e veja avatar, missão e perfil público." },
       { property: "og:title", content: "Explore o universo Habbo — Bobba Index" },
       { property: "og:description", content: "Jogadores, emblemas e histórias em um só lugar." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: HabbosPage,

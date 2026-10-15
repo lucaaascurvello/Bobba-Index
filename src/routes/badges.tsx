@@ -28,6 +28,8 @@ export const Route = createFileRoute("/badges")({
       { name: "description", content: "Pesquise emblemas do Habbo Brasil por nome ou código, com imagem e descrição oficiais." },
       { property: "og:title", content: "Explorador de emblemas — Bobba Index" },
       { property: "og:description", content: "Milhares de emblemas do Habbo, indexados." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: BadgesPage,

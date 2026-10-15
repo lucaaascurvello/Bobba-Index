@@ -7,6 +7,8 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: "O Bobba Index é uma ferramenta independente para explorar dados públicos do Habbo Hotel." },
       { property: "og:title", content: "Sobre o Bobba Index" },
       { property: "og:description", content: "Ferramenta independente, sem afiliação com a Sulake ou o Habbo Hotel." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AboutPage,
