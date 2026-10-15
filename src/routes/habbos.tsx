@@ -156,7 +156,7 @@ function InitialState() {
           </div>
         </div>
         <div className="flex justify-center">
-          <img src={hotelImage.url} alt={t("howImgAlt")} width={700} height={885} className="animate-drift h-auto w-64 max-w-full" loading="lazy" />
+          <img src={hotelImage.url} alt={t("howImgAlt")} width={700} height={885} className="animate-float h-auto w-64 max-w-full" loading="lazy" />
         </div>
       </div>
       <HotelMarquee />
