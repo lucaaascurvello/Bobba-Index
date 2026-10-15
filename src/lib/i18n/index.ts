@@ -11,6 +11,7 @@ import { it } from "./it";
 import { nl } from "./nl";
 import { pt, type Dict } from "./pt";
 import { tr } from "./tr";
+import { HOTEL_LOCALE } from "./locale-map";
 
 /** Each hotel's main language dictionary. */
 const DICTS: Record<HotelId, Dict> = { br: pt, com: en, es, de, fr, it, nl, fi, tr };
