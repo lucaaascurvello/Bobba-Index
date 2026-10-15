@@ -28,3 +28,6 @@
 - [x] Trocar "Sobre o projeto" por botão do repositório no GitHub e botão "Conheça o desenvolvedor".
 - [x] Criar âncora na seção do desenvolvedor da página Sobre e ligar o botão a ela.
 - [x] Deixar o texto do rodapé mais legível; verificar nos nove idiomas e no celular.
+
+## Ícone da aba (favicon)
+- [x] Usar a caveirinha amarela da marca como ícone da aba (SVG + PNG + ICO + apple-touch-icon).
