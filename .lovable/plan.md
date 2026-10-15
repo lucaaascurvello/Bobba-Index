@@ -20,10 +20,9 @@ Vamos fazer o mesmo, de forma honesta:
 
 **Página Sobre**: nova explicação de como o histórico é registrado e seus limites.
 
-## Privacidade
-- Guardamos apenas dados que a API já mostra publicamente (look, missão, lista de amigos pública).
-- Perfis privados não geram histórico de amigos.
-- Nada de dados pessoais de quem pesquisa.
+## Registro completo
+- Guardamos tudo o que o Habbo mostra publicamente sobre o jogador a cada consulta, sem filtros extras: look, missão, amigos, grupos, quartos e emblemas.
+- Perfis que o próprio Habbo deixa privados não liberam a lista de amigos, então esses não terão histórico de amigos.
 
 ## Detalhes técnicos
 - Ativar Lovable Cloud (banco de dados).
