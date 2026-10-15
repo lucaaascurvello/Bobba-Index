@@ -155,8 +155,9 @@ function InitialState() {
             </Button>
           </div>
         </div>
-        <div className="flex justify-center">
-          <img src={hotelImage.url} alt={t("howImgAlt")} width={700} height={885} className="h-auto w-64 max-w-full drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]" loading="lazy" />
+        <div className="relative isolate flex justify-center">
+          <div aria-hidden className="animate-halo pointer-events-none absolute inset-x-[-18%] inset-y-[10%] -z-10 blur-3xl" />
+          <img src={hotelImage.url} alt={t("howImgAlt")} width={700} height={885} className="animate-float h-auto w-64 max-w-full drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]" loading="lazy" />
         </div>
       </div>
       <HotelMarquee />
