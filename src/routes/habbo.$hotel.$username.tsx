@@ -6,8 +6,6 @@ import type { ReactNode } from "react";
 import { toast } from "sonner";
 
 import { HabboImage } from "@/components/habbo/HabboImage";
-import { HistoryPanel } from "@/components/habbo/HistoryPanel";
-import { usePlayerHistory } from "@/lib/habbo/use-history";
 import { ErrorPanel, StatePanel } from "@/components/states/StatePanel";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -30,7 +28,6 @@ export const Route = createFileRoute("/habbo/$hotel/$username")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  validateSearch: (s: Record<string, unknown>): { tab?: string | undefined } => ({ tab: typeof s["tab"] === "string" ? s["tab"] : undefined }),
   component: ProfilePage,
 });
 
@@ -153,10 +150,8 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
     return render(profile);
   };
   const count = (n?: number | null) => (n == null ? "" : ` (${n})`);
-  const historyQ = usePlayerHistory(user);
-  const initialTab = Route.useSearch().tab ?? "overview";
   return (
-    <Tabs defaultValue={initialTab} className="mt-8">
+    <Tabs defaultValue="overview" className="mt-8">
       <TabsList className="h-auto w-full justify-start overflow-x-auto bg-surface p-1">
         <TabsTrigger value="overview">{t("tabOverview")}</TabsTrigger>
         <TabsTrigger value="badges">{t("tabBadges")}{count(profile?.badges?.length)}</TabsTrigger>
@@ -165,7 +160,6 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
         <TabsTrigger value="friends">{t("tabFriends")}{count(profile?.friends?.length)}</TabsTrigger>
         <TabsTrigger value="achievements">{t("tabAch")}{count(profile?.badges?.filter((b) => b.code.startsWith("ACH_")).length)}</TabsTrigger>
         <TabsTrigger value="photos">{t("tabPhotos")}</TabsTrigger>
-        <TabsTrigger value="history">{t("tabHistory")}</TabsTrigger>
       </TabsList>
 
       <TabsContent value="overview" className="mt-6 space-y-6">
@@ -249,10 +243,6 @@ function ProfileTabs({ user, profile, loading, error, retry }: { user: HabboUser
 
       <TabsContent value="photos" className="mt-6">
         <Photos user={user} />
-      </TabsContent>
-
-      <TabsContent value="history" className="mt-6">
-        <HistoryPanel hotel={user.hotel} history={historyQ.data} loading={historyQ.isPending} />
       </TabsContent>
     </Tabs>
   );

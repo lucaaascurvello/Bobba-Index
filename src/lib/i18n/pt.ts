@@ -79,6 +79,7 @@ export const pt = {
   aboutPrivacy: "Público não significa acesso a tudo",
   aboutPrivacyText: "Exibimos somente os dados que o Habbo considera públicos e disponibiliza em sua API. Senhas, e-mails, mensagens privadas e informações sensíveis não são consultados nem expostos por esta ferramenta. Perfis privados e informações ocultas são respeitados: não contornamos essas restrições. Uma informação indisponível não significa necessariamente que ela não exista.",
   aboutLocal: "Favoritos e buscas ficam no seu dispositivo",
+  aboutLocalText: "Favoritos e pesquisas recentes são salvos apenas no armazenamento local do seu navegador. Não criamos um banco de histórico dos jogadores nem recuperamos missões antigas, amigos excluídos ou visuais anteriores que a API não oferece. Você pode remover os favoritos ou limpar as buscas na página de pesquisa.",
 
   devLabel: "Um projeto caseiro",
   devHi: "Oi, sou",
@@ -92,25 +93,6 @@ export const pt = {
   devPixCopied: "Código Pix copiado!",
   devScanQr: "ou escaneie o QR no app do banco",
 
-  tabHistory: "Histórico",
-  histUnavailable: "Histórico indisponível",
-  histUnavailableDesc: "Não foi possível carregar o histórico agora. Tente novamente em instantes.",
-  histNothingYet: "Nenhuma mudança registrada ainda.",
-  histTrackedSince: "Acompanhando este jogador desde {date}. O histórico é montado a cada consulta feita no Bobba Index.",
-  histStartsNow: "O histórico começa agora — volte mais tarde para ver mudanças.",
-  histLooks: "Visuais recentes",
-  histLookAlt: "Visual anterior do jogador",
-  histMottos: "Missões anteriores",
-  histPeriod: "De {a} até {b}",
-  histRemoved: "Amigos excluídos",
-  histRemovedNote: "A data exata não é conhecida: mostramos o intervalo entre duas consultas.",
-  histAdded: "Amigos novos",
-  histBetween: "Entre {a} e {b}",
-  histStartedToday: "Histórico iniciado hoje",
-  histSumLooks: "{n} visuais",
-  histSumMottos: "{n} missões anteriores",
-  histSumRemoved: "{n} amigos excluídos",
-  aboutLocalText: "Favoritos e pesquisas recentes ficam só no seu navegador. Já o histórico de visuais, missões e amigos é registrado pelo Bobba Index a cada consulta de um jogador, a partir do momento em que esse recurso foi ativado — não temos dados de antes disso.",
 };
 
 export type Dict = typeof pt;

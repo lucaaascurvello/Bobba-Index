@@ -31,6 +31,3 @@
 
 ## Ícone da aba (favicon)
 - [x] Usar a caveirinha amarela da marca como ícone da aba (SVG + PNG + ICO + apple-touch-icon).
-
-## Histórico de jogadores
-- [x] Visuais, missões, amigos excluídos/novos no perfil e resumo na busca
