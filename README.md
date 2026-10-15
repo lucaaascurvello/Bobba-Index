@@ -1,4 +1,4 @@
-# 🎮 Bobba Index
+# 💀 Bobba Index
 ### O universo Habbo, indexado.
 
 Explore jogadores, perfis públicos e informações do universo Habbo em uma plataforma independente criada para reunir a nostalgia da comunidade com a tecnologia.
