@@ -92,7 +92,7 @@ function BadgesPage() {
 
       <div className="mt-4 min-h-5 text-xs text-muted-foreground">
         {data && t("countOf", { a: num(data.total), b: num(data.catalogSize) })}
-        {data?.snapshotAt && <span className="ml-2 text-primary/80">· {t("catalogSnapshot", { date: date(data.snapshotAt) })}</span>}
+        {data?.snapshotAt && <span className="ml-2 text-primary/80">· {t("catalogSnapshot", { date: date(data.snapshotAt) ?? "" })}</span>}
       </div>
 
       <div className="mt-3">
