@@ -11,3 +11,4 @@
 - [x] Explicar a pesquisa por nick e hotel, dados públicos e privacidade, finalidade de estudo e contexto da comunidade.
 - [x] Manter as novas explicações nos nove idiomas.
 - [x] Verificar a página, a troca de idioma e a leitura em telas menores; executar os testes existentes.
+- [x] Seção do desenvolvedor na Sobre (foto, LinkedIn, GitHub, cafézinho Pix) — 2026-10-15
