@@ -82,4 +82,16 @@ export const fi: Dict = {
   aboutLocal: "Suosikit ja haut pysyvät laitteellasi",
   aboutLocalText: "Suosikit ja viimeisimmät haut tallennetaan vain selaimesi paikalliseen tallennustilaan. Emme luo pelaajahistoriaa tai palauta vanhoja mottoja, poistettuja kavereita tai aiempia asuja, joita rajapinta ei tarjoa. Voit poistaa suosikkeja ja tyhjentää haut hakusivulla.",
 
+  devLabel: "Itse tehty projekti",
+  devHi: "Moi, minä olen",
+  devRole: "Analista de Redes Sociais",
+  devBio: "Bobba Index on itsenäinen projekti, joka on kehitetty opiskelua varten ja tarjoamaan ilmaisen hakutyökalun Habbo-yhteisölle. Se käyttää ainoastaan virallisen Habbo Hotel -rajapinnan julkisia tietoja eikä käsittele pelaajien yksityisiä tietoja.",
+  devFindMe: "Missä löydät minut",
+  devCoffeeLabel: "Tue projektia",
+  devCoffeeTitle: "Kutsu minut kahville",
+  devCoffeeText: "Pidätkö Bobba Indexistä? Mikä tahansa summa Pixin kautta auttaa pitämään projektin hereillä ja toiminnassa.",
+  devCopyPix: "Kopioi Pix-koodi",
+  devPixCopied: "Pix-koodi kopioitu!",
+  devScanQr: "tai skannaa QR-koodi pankkisovelluksessa",
+
 };

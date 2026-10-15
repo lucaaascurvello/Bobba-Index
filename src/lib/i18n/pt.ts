@@ -80,6 +80,18 @@ export const pt = {
   aboutLocal: "Favoritos e buscas ficam no seu dispositivo",
   aboutLocalText: "Favoritos e pesquisas recentes são salvos apenas no armazenamento local do seu navegador. Não criamos um banco de histórico dos jogadores nem recuperamos missões antigas, amigos excluídos ou visuais anteriores que a API não oferece. Você pode remover os favoritos ou limpar as buscas na página de pesquisa.",
 
+  devLabel: "Um projeto caseiro",
+  devHi: "Oi, sou",
+  devRole: "Analista de Redes Sociais",
+  devBio: "O Bobba Index é um projeto independente, desenvolvido para fins de estudo e para oferecer uma ferramenta de busca gratuita à comunidade Habbo. Utiliza exclusivamente dados públicos disponibilizados pela API oficial do Habbo Hotel, sem acessar informações privadas dos jogadores.",
+  devFindMe: "Onde me achar",
+  devCoffeeLabel: "Apoie o projeto",
+  devCoffeeTitle: "Pague um cafezinho",
+  devCoffeeText: "Gostou do Bobba Index? Qualquer valor via Pix ajuda a manter o projeto acordado e no ar.",
+  devCopyPix: "Copiar código Pix",
+  devPixCopied: "Código Pix copiado!",
+  devScanQr: "ou escaneie o QR no app do banco",
+
 };
 
 export type Dict = typeof pt;

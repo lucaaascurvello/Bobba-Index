@@ -82,4 +82,16 @@ export const fr: Dict = {
   aboutLocal: "Favoris et recherches restent sur ton appareil",
   aboutLocalText: "Les favoris et recherches récentes sont enregistrés uniquement dans le stockage local du navigateur. Nous ne créons pas d’historique des joueurs et ne récupérons pas d’anciennes missions, d’amis supprimés ou de looks passés absents de l’API. Tu peux supprimer les favoris et effacer les recherches sur la page de recherche.",
 
+  devLabel: "Un projet fait maison",
+  devHi: "Salut, moi c'est",
+  devRole: "Analista de Redes Sociais",
+  devBio: "Bobba Index est un projet indépendant, développé à des fins d'étude et pour offrir un outil de recherche gratuit à la communauté Habbo. Il utilise exclusivement des données publiées via l'API officielle d'Habbo Hotel, sans accéder aux informations privées des joueurs.",
+  devFindMe: "Où me trouver",
+  devCoffeeLabel: "Soutenez le projet",
+  devCoffeeTitle: "Offre-moi un petit café",
+  devCoffeeText: "Tu aimes Bobba Index ? Tout montant via Pix aide à garder le projet éveillé et en ligne.",
+  devCopyPix: "Copier le code Pix",
+  devPixCopied: "Code Pix copié !",
+  devScanQr: "ou scannez le QR dans l'appli bancaire",
+
 };
