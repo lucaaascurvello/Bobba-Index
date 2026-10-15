@@ -34,16 +34,15 @@ function HabbosPage() {
   const [touched, setTouched] = useState(false);
 
   useEffect(() => setValue(q ?? ""), [q]);
-  const recentPlaceholder = null; void recentPlaceholder;
+
+  const term = q?.trim() ?? "";
+  const query = useQuery({ ...userByNameQuery(hotel, term), enabled: term.length > 0 });
   const recent = useRecentSearches();
   const found = query.data;
   useEffect(() => {
     if (found) recent.add({ hotel: found.hotel, name: found.name, figure: found.figureString });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [found?.uniqueId]);
-
-  const term = q?.trim() ?? "";
-  const query = useQuery({ ...userByNameQuery(hotel, term), enabled: term.length > 0 });
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -110,7 +109,7 @@ function HabbosPage() {
       </section>
 
       <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6" aria-live="polite">
-        {!term && <InitialState />}
+        {!term && <><SavedPlayers /><InitialState /></>}
         {term && query.isPending && <PlayerCardSkeleton />}
         {term && query.isError &&
           (query.error instanceof HabboError && query.error.kind === "not_found" ? (
