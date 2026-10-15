@@ -93,3 +93,11 @@ export interface BadgeCatalogPage {
   pageSize: number;
   catalogSize: number;
 }
+
+export interface HabboPhoto {
+  id: string;
+  url: string;
+  previewUrl: string | null;
+  takenAt: string | null;
+  likes: number | null;
+}

@@ -226,3 +226,26 @@ export async function searchBadgeCatalog(
     },
   };
 }
+
+/** GET /extradata/public/users/{id}/photos — public photos taken in-game. */
+export async function fetchPhotos(hotel: string, uniqueId: string): Promise<ApiResult<import("./types").HabboPhoto[]>> {
+  const base = hotelBase(hotel);
+  if (!base.ok) return base;
+  if (!/^[a-z0-9-]{3,80}$/i.test(uniqueId)) return fail("invalid_input", "Identificador inválido.");
+  const r = await getJson(`${base.data}/extradata/public/users/${uniqueId}/photos`);
+  if (!r.ok) return r.error.kind === "not_found" ? { ok: true, data: [] } : r;
+  return { ok: true, data: arr(r.data).map(mapPhoto).filter((p) => p.url) };
+}
+
+export function mapPhoto(p: Record<string, unknown>) {
+  const t = p["time"];
+  const takenAt = typeof t === "number" ? new Date(t).toISOString() : str(t);
+  const fix = (u: string | null) => (u && u.startsWith("//") ? `https:${u}` : u);
+  return {
+    id: String(p["id"] ?? p["url"] ?? ""),
+    url: fix(str(p["url"])) ?? "",
+    previewUrl: fix(str(p["previewUrl"])),
+    takenAt,
+    likes: Array.isArray(p["likes"]) ? p["likes"].length : num(p["likes"]),
+  };
+}

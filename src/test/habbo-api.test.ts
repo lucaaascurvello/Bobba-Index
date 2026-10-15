@@ -23,3 +23,13 @@ describe("habbo service", () => {
     expect(u.selectedBadges).toEqual([]);
   });
 });
+
+describe("photos", () => {
+  it("maps photo time and protocol-relative urls", async () => {
+    const { mapPhoto } = await import("@/lib/habbo/api");
+    const p = mapPhoto({ id: "1", url: "//x/a.png", time: 0, likes: ["a", "b"] });
+    expect(p.url).toBe("https://x/a.png");
+    expect(p.takenAt).toBe("1970-01-01T00:00:00.000Z");
+    expect(p.likes).toBe(2);
+  });
+});

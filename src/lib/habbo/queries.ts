@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { getProfileFn, getUserByNameFn, searchBadgesFn } from "./habbo.functions";
+import { getPhotosFn, getProfileFn, getUserByNameFn, searchBadgesFn } from "./habbo.functions";
 import type { ApiResult, HabboErrorInfo } from "./types";
 
 export class HabboError extends Error {
@@ -42,5 +42,13 @@ export const badgeCatalogQuery = (hotel: string, q: string, prefix: "all" | "ach
     queryKey: ["badges", hotel, q.trim().toLowerCase(), prefix, page],
     queryFn: async () => unwrap(await searchBadgesFn({ data: { hotel, q, prefix, page } })),
     staleTime: 30 * 60_000,
+    retry,
+  });
+
+export const photosQuery = (hotel: string, uniqueId: string) =>
+  queryOptions({
+    queryKey: ["habbo", "photos", hotel, uniqueId],
+    queryFn: async () => unwrap(await getPhotosFn({ data: { hotel, uniqueId } })),
+    staleTime: 10 * 60_000,
     retry,
   });
