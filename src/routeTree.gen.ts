@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BadgesRouteImport } from './routes/badges'
+import { Route as CompararRouteImport } from './routes/comparar'
+import { Route as FotosRouteImport } from './routes/fotos'
 import { Route as HabbosRouteImport } from './routes/habbos'
 import { Route as HabboHotelUsernameRouteImport } from './routes/habbo.$hotel.$username'
 
@@ -30,6 +32,16 @@ const BadgesRoute = BadgesRouteImport.update({
   path: '/badges',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompararRoute = CompararRouteImport.update({
+  id: '/comparar',
+  path: '/comparar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FotosRoute = FotosRouteImport.update({
+  id: '/fotos',
+  path: '/fotos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HabbosRoute = HabbosRouteImport.update({
   id: '/habbos',
   path: '/habbos',
@@ -45,6 +57,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/badges': typeof BadgesRoute
+  '/comparar': typeof CompararRoute
+  '/fotos': typeof FotosRoute
   '/habbos': typeof HabbosRoute
   '/habbo/$hotel/$username': typeof HabboHotelUsernameRoute
 }
@@ -52,6 +66,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/badges': typeof BadgesRoute
+  '/comparar': typeof CompararRoute
+  '/fotos': typeof FotosRoute
   '/habbos': typeof HabbosRoute
   '/habbo/$hotel/$username': typeof HabboHotelUsernameRoute
 }
@@ -60,19 +76,37 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/badges': typeof BadgesRoute
+  '/comparar': typeof CompararRoute
+  '/fotos': typeof FotosRoute
   '/habbos': typeof HabbosRoute
   '/habbo/$hotel/$username': typeof HabboHotelUsernameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/badges' | '/habbos' | '/habbo/$hotel/$username'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/badges'
+    | '/comparar'
+    | '/fotos'
+    | '/habbos'
+    | '/habbo/$hotel/$username'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/badges' | '/habbos' | '/habbo/$hotel/$username'
+  to:
+    | '/'
+    | '/about'
+    | '/badges'
+    | '/comparar'
+    | '/fotos'
+    | '/habbos'
+    | '/habbo/$hotel/$username'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/badges'
+    | '/comparar'
+    | '/fotos'
     | '/habbos'
     | '/habbo/$hotel/$username'
   fileRoutesById: FileRoutesById
@@ -81,6 +115,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   BadgesRoute: typeof BadgesRoute
+  CompararRoute: typeof CompararRoute
+  FotosRoute: typeof FotosRoute
   HabbosRoute: typeof HabbosRoute
   HabboHotelUsernameRoute: typeof HabboHotelUsernameRoute
 }
@@ -108,6 +144,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BadgesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/comparar': {
+      id: '/comparar'
+      path: '/comparar'
+      fullPath: '/comparar'
+      preLoaderRoute: typeof CompararRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fotos': {
+      id: '/fotos'
+      path: '/fotos'
+      fullPath: '/fotos'
+      preLoaderRoute: typeof FotosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/habbos': {
       id: '/habbos'
       path: '/habbos'
@@ -129,6 +179,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BadgesRoute: BadgesRoute,
+  CompararRoute: CompararRoute,
+  FotosRoute: FotosRoute,
   HabbosRoute: HabbosRoute,
   HabboHotelUsernameRoute: HabboHotelUsernameRoute,
 }
