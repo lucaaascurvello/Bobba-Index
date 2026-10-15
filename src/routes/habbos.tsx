@@ -8,6 +8,7 @@ import hotelImage from "@/assets/complexo-urbano-futurista.webp.asset.json";
 import { Button } from "@/components/ui/button";
 import { PlayerCard, PlayerCardSkeleton } from "@/components/habbo/PlayerCard";
 import { SavedPlayers } from "@/components/habbo/SavedPlayers";
+import { HotelMarquee } from "@/components/habbo/HotelMarquee";
 import { useRecentSearches } from "@/lib/local-store";
 import { ErrorPanel, StatePanel } from "@/components/states/StatePanel";
 import { useHotel } from "@/lib/habbo/hotel-context";
@@ -134,28 +135,31 @@ function HabbosPage() {
 function InitialState() {
   const { t } = useI18n();
   return (
-    <div className="grid items-center gap-10 md:grid-cols-[1fr_240px]">
-      <div className="space-y-4">
-        <h2 className="font-display text-xl font-semibold text-foreground">{t("howTitle")}</h2>
-        <ol className="space-y-3 text-sm text-muted-foreground">
-          {[t("how1"), t("how2"), t("how3")].map((text, i) => (
-            <li key={i} className="flex gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded border border-border bg-surface font-pixel text-[10px] text-primary-soft">{i + 1}</span>
-              {text}
-            </li>
-          ))}
-        </ol>
-        <div className="flex flex-wrap gap-2 pt-2">
-          <Button asChild className="h-auto min-h-10 whitespace-normal py-3">
-            <Link to="/about">
-              <Info /> {t("howCta")} <ArrowUpRight />
-            </Link>
-          </Button>
+    <div>
+      <div className="grid items-center gap-10 md:grid-cols-[1fr_240px]">
+        <div className="space-y-4">
+          <h2 className="font-display text-xl font-semibold text-foreground">{t("howTitle")}</h2>
+          <ol className="space-y-3 text-sm text-muted-foreground">
+            {[t("how1"), t("how2"), t("how3")].map((text, i) => (
+              <li key={i} className="flex gap-3">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded border border-border bg-surface font-pixel text-[10px] text-primary-soft">{i + 1}</span>
+                {text}
+              </li>
+            ))}
+          </ol>
+          <div className="flex flex-wrap gap-2 pt-2">
+            <Button asChild className="h-auto min-h-10 whitespace-normal py-3">
+              <Link to="/about">
+                <Info /> {t("howCta")} <ArrowUpRight />
+              </Link>
+            </Button>
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <img src={hotelImage.url} alt={t("howImgAlt")} width={700} height={885} className="h-auto w-64 max-w-full drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]" loading="lazy" />
         </div>
       </div>
-      <div className="flex justify-center">
-        <img src={hotelImage.url} alt={t("howImgAlt")} width={700} height={885} className="h-auto w-64 max-w-full drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]" loading="lazy" />
-      </div>
+      <HotelMarquee />
     </div>
   );
 }
