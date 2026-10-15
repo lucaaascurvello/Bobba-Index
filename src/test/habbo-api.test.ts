@@ -2,17 +2,17 @@ import { describe, expect, it, vi } from "vitest";
 
 import { fetchBadgeOwners, fetchCommunityPhotos, fetchPhotos, fetchProfile, fetchUserByName, mapUser, normalizeName, parseBadgeTexts, searchBadgeCatalog } from "@/lib/habbo/api";
 
-describe("Brazil-only API access", () => {
-  it("rejects disabled hotels on every public-data path without network calls", async () => {
+describe("Unknown hotel API access", () => {
+  it("rejects unknown hotels on every public-data path without network calls", async () => {
     const network = vi.spyOn(globalThis, "fetch");
     try {
       const results = await Promise.all([
-        fetchUserByName("com", "Bobba"),
-        fetchProfile("com", "hhus-123"),
-        fetchPhotos("com", "hhus-123"),
-        fetchBadgeOwners("com", "ACH_Login1"),
-        fetchCommunityPhotos("com"),
-        searchBadgeCatalog("com", { q: "", prefix: "all", page: 1, pageSize: 60 }),
+        fetchUserByName("xx", "Bobba"),
+        fetchProfile("xx", "hhus-123"),
+        fetchPhotos("xx", "hhus-123"),
+        fetchBadgeOwners("xx", "ACH_Login1"),
+        fetchCommunityPhotos("xx"),
+        searchBadgeCatalog("xx", { q: "", prefix: "all", page: 1, pageSize: 60 }),
       ]);
       for (const result of results) {
         expect(result).toMatchObject({ ok: false, error: { kind: "unsupported_hotel" } });
