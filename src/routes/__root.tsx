@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -117,7 +118,7 @@ function RootComponent() {
           <div className="flex min-h-screen flex-col">
             <SiteHeader />
             <main className="flex-1">
-              <Outlet />
+              <PageTransition />
             </main>
             <SiteFooter />
           </div>
@@ -125,5 +126,14 @@ function RootComponent() {
         </TooltipProvider>
       </HotelProvider>
     </QueryClientProvider>
+  );
+}
+
+function PageTransition() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  return (
+    <div key={pathname} className="animate-page-in">
+      <Outlet />
+    </div>
   );
 }
