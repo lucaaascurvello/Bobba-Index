@@ -13,6 +13,7 @@ import { ErrorPanel, StatePanel } from "@/components/states/StatePanel";
 import { useHotel } from "@/lib/habbo/hotel-context";
 import { getHotel } from "@/lib/habbo/hotels";
 import { HabboError, userByNameQuery } from "@/lib/habbo/queries";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/habbos")({
   validateSearch: z.object({ q: z.string().max(64).optional() }),
@@ -33,6 +34,7 @@ function HabbosPage() {
   const { q } = Route.useSearch();
   const navigate = useNavigate({ from: "/habbos" });
   const { hotel } = useHotel();
+  const { t } = useI18n();
   const [value, setValue] = useState(q ?? "");
   const [touched, setTouched] = useState(false);
 
@@ -64,12 +66,12 @@ function HabbosPage() {
         <div className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" aria-hidden />
         <div className="relative mx-auto max-w-3xl px-4 pb-16 pt-20 text-center sm:px-6 sm:pt-28">
           <h1 className="font-display text-4xl font-semibold text-foreground sm:text-6xl">
-            Explore o universo <span className="text-primary-soft">Habbo.</span>
+            {t("heroTitle")} <span className="text-primary-soft">Habbo.</span>
           </h1>
-          <p className="mt-4 text-base text-muted-foreground sm:text-lg">Jogadores, emblemas e histórias em um só lugar.</p>
+          <p className="mt-4 text-base text-muted-foreground sm:text-lg">{t("heroSub")}</p>
 
           <form onSubmit={submit} role="search" className="mx-auto mt-10 max-w-2xl" noValidate>
-            <label htmlFor="nick" className="sr-only">Nick do jogador</label>
+            <label htmlFor="nick" className="sr-only">{t("searchLabel")}</label>
             <div
               className={`flex items-center gap-2 rounded-2xl border bg-card p-2 shadow-sm transition-colors focus-within:border-primary/50 ${emptyError ? "border-destructive/70" : "border-border"}`}
             >
@@ -78,7 +80,7 @@ function HabbosPage() {
                 id="nick"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                placeholder="Digite o nick de um jogador..."
+                placeholder={t("searchPlaceholder")}
                 autoComplete="off"
                 spellCheck={false}
                 maxLength={32}
@@ -95,13 +97,11 @@ function HabbosPage() {
                 className="flex h-12 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-70"
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-                <span className="hidden sm:inline">{loading ? "Buscando" : "Pesquisar"}</span>
+                <span className="hidden sm:inline">{loading ? t("searching") : t("search")}</span>
               </Button>
             </div>
             <p id="nick-help" className={`mt-3 text-xs ${emptyError ? "text-destructive" : "text-muted-foreground"}`}>
-              {emptyError
-                ? "Digite um nick antes de pesquisar."
-                : "A busca usa a API pública oficial e encontra o nick exato (maiúsculas não importam)."}
+              {emptyError ? t("searchEmpty") : t("searchHelp")}
             </p>
           </form>
         </div>
@@ -114,15 +114,15 @@ function HabbosPage() {
           (query.error instanceof HabboError && query.error.kind === "not_found" ? (
             <StatePanel
               icon={SearchX}
-              title="Nenhum jogador encontrado"
-              description={<>Não existe um jogador com o nick exato “{term}” em {getHotel(hotel)?.name}. Confira a grafia — buscas parciais não são suportadas pela API.</>}
+              title={t("notFoundTitle")}
+              description={t("notFoundDesc", { term, hotel: getHotel(hotel)?.name ?? hotel })}
             />
           ) : (
             <ErrorPanel error={query.error} onRetry={() => query.refetch()} />
           ))}
         {term && query.data && (
           <div>
-            <p className="mb-3 text-xs uppercase tracking-wider text-muted-foreground">1 resultado exato</p>
+            <p className="mb-3 text-xs uppercase tracking-wider text-muted-foreground">{t("oneResult")}</p>
             <PlayerCard user={query.data} />
           </div>
         )}
@@ -132,32 +132,29 @@ function HabbosPage() {
 }
 
 function InitialState() {
+  const { t } = useI18n();
   return (
     <div className="grid items-center gap-10 md:grid-cols-[1fr_240px]">
       <div className="space-y-4">
-        <h2 className="font-display text-xl font-semibold text-foreground">Como funciona</h2>
+        <h2 className="font-display text-xl font-semibold text-foreground">{t("howTitle")}</h2>
         <ol className="space-y-3 text-sm text-muted-foreground">
-          {[
-            "Digite o nick exato de um jogador do hotel selecionado.",
-            "Consultamos a API pública do Habbo em tempo real — nada é inventado.",
-            "Abra o perfil para ver emblemas, grupos e quartos públicos.",
-          ].map((t, i) => (
-            <li key={t} className="flex gap-3">
+          {[t("how1"), t("how2"), t("how3")].map((text, i) => (
+            <li key={i} className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded border border-border bg-surface font-pixel text-[10px] text-primary-soft">{i + 1}</span>
-              {t}
+              {text}
             </li>
           ))}
         </ol>
         <div className="flex flex-wrap gap-2 pt-2">
           <Button asChild className="h-auto min-h-10 whitespace-normal py-3">
             <Link to="/about">
-              <Info /> Saiba mais sobre os dados <ArrowUpRight />
+              <Info /> {t("howCta")} <ArrowUpRight />
             </Link>
           </Button>
         </div>
       </div>
       <div className="flex justify-center">
-        <img src={hotelImage.url} alt="Complexo urbano futurista em pixel art isométrica, com terraços, piscinas e uma torre com antena" width={700} height={885} className="h-auto w-64 max-w-full drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]" loading="lazy" />
+        <img src={hotelImage.url} alt={t("howImgAlt")} width={700} height={885} className="h-auto w-64 max-w-full drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]" loading="lazy" />
       </div>
     </div>
   );
