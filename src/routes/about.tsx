@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Globe2, GraduationCap, Monitor, Search, ShieldCheck, UserRound } from "lucide-react";
 
 import { useI18n } from "@/lib/i18n";
 
@@ -6,9 +7,9 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "Sobre — Bobba Index" },
-      { name: "description", content: "O Bobba Index é uma ferramenta independente para explorar dados públicos do Habbo Hotel." },
+      { name: "description", content: "Entenda como o Bobba Index pesquisa jogadores em nove hotéis Habbo, respeita a privacidade e organiza dados públicos em um projeto independente de estudo." },
       { property: "og:title", content: "Sobre o Bobba Index" },
-      { property: "og:description", content: "Ferramenta independente, sem afiliação com a Sulake ou o Habbo Hotel." },
+      { property: "og:description", content: "Como funciona a busca por hotel, quais dados são públicos e por que o Bobba Index é um projeto independente de estudo." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -25,33 +26,88 @@ function AboutPage() {
     [t("src4"), "images.habbo.com/c_images/album1584", t("src4n")],
     [t("src5"), "/gamedata/external_flash_texts/1", t("src5n")],
   ];
+  const steps = [
+    { icon: Globe2, title: t("aboutStep1Title"), text: t("aboutStep1") },
+    { icon: Search, title: t("aboutStep2Title"), text: t("aboutStep2") },
+    { icon: UserRound, title: t("aboutStep3Title"), text: t("aboutStep3") },
+  ];
   return (
-    <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
+    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
       <p className="font-pixel text-xs uppercase text-primary-soft">{t("aboutLabel")}</p>
-      <h1 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">{t("aboutTitle")}</h1>
-      <div className="mt-6 space-y-4 text-muted-foreground">
-        <p>{t("aboutP1")}</p>
-        <p className="rounded-xl border border-border bg-card p-4 text-sm">
+      <h1 className="mt-3 font-display text-4xl font-semibold text-foreground sm:text-5xl">Bobba Index</h1>
+      <p className="mt-3 font-display text-xl text-primary-soft">{t("aboutTitle")}</p>
+      <p className="mt-6 max-w-3xl leading-relaxed text-muted-foreground">{t("aboutP1")}</p>
+
+      <section className="mt-10 border-t border-border pt-8">
+        <div className="flex items-center gap-3">
+          <GraduationCap className="size-5 shrink-0 text-primary-soft" aria-hidden="true" />
+          <h2 className="font-display text-xl font-semibold">{t("aboutPurpose")}</h2>
+        </div>
+        <p className="mt-4 leading-relaxed text-muted-foreground">{t("aboutCommunity")}</p>
+        <p className="mt-5 border-l-2 border-primary/50 pl-4 text-sm leading-relaxed text-muted-foreground">
           <strong className="text-foreground">{t("aboutNoAff")}</strong> {t("aboutNoAffText")}
         </p>
-        <p>{t("aboutP2")}</p>
-      </div>
+      </section>
 
-      <h2 className="mt-12 font-display text-xl font-semibold text-foreground">{t("aboutSources")}</h2>
-      <div className="mt-4 overflow-hidden rounded-xl border border-border">
-        {SOURCES.map(([name, path, note]) => (
-          <div key={name} className="grid gap-1 border-b border-border bg-card p-4 last:border-0 sm:grid-cols-[180px_1fr]">
-            <p className="text-sm font-medium text-foreground">{name}</p>
-            <div>
-              <code className="break-all text-xs text-primary-soft">{path}</code>
-              <p className="mt-1 text-xs text-muted-foreground">{note}</p>
+      <section className="mt-10 border-t border-border pt-8">
+        <h2 className="font-display text-xl font-semibold">{t("aboutHow")}</h2>
+        <ol className="mt-5 divide-y divide-border">
+          {steps.map(({ icon: Icon, title, text }, index) => (
+            <li key={title} className="grid grid-cols-[36px_1fr] gap-4 py-5 sm:grid-cols-[44px_1fr] sm:gap-6">
+              <div className="flex flex-col items-center gap-2 text-primary-soft">
+                <span className="font-pixel text-xs">0{index + 1}</span>
+                <Icon className="size-5" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="font-display font-semibold">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="mt-8 border-t border-border pt-8">
+        <div className="flex items-center gap-3">
+          <Globe2 className="size-5 shrink-0 text-primary-soft" aria-hidden="true" />
+          <h2 className="font-display text-xl font-semibold">{t("aboutHotels")}</h2>
+        </div>
+        <p className="mt-4 leading-relaxed text-muted-foreground">{t("aboutHotelsText")}</p>
+      </section>
+
+      <section className="mt-10 border-t border-border pt-8">
+        <div className="flex items-center gap-3">
+          <ShieldCheck className="size-5 shrink-0 text-primary-soft" aria-hidden="true" />
+          <h2 className="font-display text-xl font-semibold">{t("aboutPrivacy")}</h2>
+        </div>
+        <p className="mt-4 leading-relaxed text-muted-foreground">{t("aboutPrivacyText")}</p>
+      </section>
+
+      <section className="mt-10 border-t border-border pt-8">
+        <div className="flex items-center gap-3">
+          <Monitor className="size-5 shrink-0 text-primary-soft" aria-hidden="true" />
+          <h2 className="font-display text-xl font-semibold">{t("aboutLocal")}</h2>
+        </div>
+        <p className="mt-4 leading-relaxed text-muted-foreground">{t("aboutLocalText")}</p>
+      </section>
+
+      <details className="mt-10 border-y border-border py-5">
+        <summary className="cursor-pointer font-display font-semibold text-foreground transition-colors hover:text-primary-soft focus-visible:outline-primary">{t("aboutSources")}</summary>
+        <div className="mt-4 divide-y divide-border">
+          {SOURCES.map(([name, path, note]) => (
+            <div key={name} className="grid gap-2 py-4 sm:grid-cols-[180px_1fr]">
+              <p className="text-sm font-medium text-foreground">{name}</p>
+              <div>
+                <code className="break-all text-xs text-primary-soft">{path}</code>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{note}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </details>
 
-      <h2 className="mt-12 font-display text-xl font-semibold text-foreground">{t("aboutLimits")}</h2>
-      <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-muted-foreground">
+      <h2 className="mt-8 font-display text-xl font-semibold text-foreground">{t("aboutLimits")}</h2>
+      <ul className="mt-4 list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted-foreground">
         <li>{t("lim1")}</li>
         <li>{t("lim2")}</li>
         <li>{t("lim3")}</li>

@@ -6,3 +6,8 @@
 
 ## Imagem do "Como funciona"
 - [x] Trocar a ilustração pela imagem isométrica enviada pelo usuário.
+
+## Página Sobre
+- [x] Explicar a pesquisa por nick e hotel, dados públicos e privacidade, finalidade de estudo e contexto da comunidade.
+- [x] Manter as novas explicações nos nove idiomas.
+- [x] Verificar a página, a troca de idioma e a leitura em telas menores; executar os testes existentes.
