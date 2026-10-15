@@ -55,3 +55,20 @@ describe("photos", () => {
     expect(p.likes).toBe(2);
   });
 });
+
+describe("badge catalog download", () => {
+  it("sends a non-browser identity and uses the stored copy when Habbo answers 463", async () => {
+    const { CATALOG_HEADERS } = await import("@/lib/habbo/api");
+    expect(CATALOG_HEADERS["User-Agent"]).not.toMatch(/Mozilla/);
+    const network = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("", { status: 463 }));
+    try {
+      const store = { load: async () => ({ items: [{ code: "ABC", name: "N", description: null }], fetchedAt: "2026-10-01T00:00:00Z" }), save: async () => {} };
+      const r = await searchBadgeCatalog("fi", { q: "", prefix: "all", page: 1, pageSize: 60 }, store);
+      expect(r).toMatchObject({ ok: true, data: { total: 1, snapshotAt: "2026-10-01T00:00:00Z" } });
+      const noStore = await searchBadgeCatalog("tr", { q: "", prefix: "all", page: 1, pageSize: 60 });
+      expect(noStore).toMatchObject({ ok: false, error: { kind: "blocked", status: 463 } });
+    } finally {
+      network.mockRestore();
+    }
+  });
+});

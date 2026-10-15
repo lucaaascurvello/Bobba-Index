@@ -49,7 +49,7 @@ export const fr: Dict = {
   badgesTitle: "Explorateur de badges",
   badgesDesc: "Les noms et descriptions viennent des textes publics du jeu (gamedata) de l'hôtel. Le catalogue liste les badges ayant un nom enregistré — sans garantie qu'ils existent tous ou soient disponibles.",
   badgesSearch: "Rechercher des badges", badgesPlaceholder: "Nom ou code, ex. : ACH_", typeAll: "Tous", typeAch: "Succès (ACH_)", typeOther: "Autres", codeType: "Type de code",
-  countOf: "{a} sur {b} badges au catalogue", noBadgeFound: "Aucun badge trouvé", noBadgeFoundDesc: "Essaie un autre nom ou code.",
+  countOf: "{a} sur {b} badges au catalogue", noBadgeFound: "Aucun badge trouvé", noBadgeFoundDesc: "Essaie un autre nom ou code.", catalogSnapshot: "Catalogue du {date} : Habbo a refusé la mise à jour pour le moment.",
   prev: "Précédent", next: "Suivant", pageOf: "Page {a} sur {b}", pagination: "Pagination", code: "Code", owners: "Propriétaires", players: "{n} joueurs", noDescReg: "Aucune description enregistrée.",
   photosTitle: "Photos de la communauté", photosSub: "Dernières photos publiques prises sur {hotel}.", refresh: "Actualiser", noPhotosFeed: "Aucune photo", noPhotosFeedDesc: "L'API n'a renvoyé aucune photo pour le moment.", authorUnavailable: "Auteur indisponible", player: "joueur",
   nfTitle: "Bobba ! Page non indexée.", nfDesc: "Cette adresse n'existe pas sur Bobba Index.", nfBack: "Retour à la recherche",

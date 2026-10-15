@@ -47,7 +47,7 @@ export const pt = {
   badgesTitle: "Explorador de emblemas",
   badgesDesc: "Nomes e descrições vêm dos textos públicos do jogo (gamedata) do hotel. O catálogo lista emblemas que possuem nome cadastrado — não é garantia de que todos existam ou estejam disponíveis.",
   badgesSearch: "Pesquisar emblemas", badgesPlaceholder: "Nome ou código, ex.: ACH_", typeAll: "Todos", typeAch: "Conquistas (ACH_)", typeOther: "Outros", codeType: "Tipo de código",
-  countOf: "{a} de {b} emblemas no catálogo", noBadgeFound: "Nenhum emblema encontrado", noBadgeFoundDesc: "Tente outro nome ou código.",
+  countOf: "{a} de {b} emblemas no catálogo", noBadgeFound: "Nenhum emblema encontrado", noBadgeFoundDesc: "Tente outro nome ou código.", catalogSnapshot: "Catálogo de {date}: o Habbo recusou a atualização no momento.",
   prev: "Anterior", next: "Próxima", pageOf: "Página {a} de {b}", pagination: "Paginação", code: "Código", owners: "Donos", players: "{n} jogadores", noDescReg: "Sem descrição cadastrada.",
   photosTitle: "Fotos da comunidade", photosSub: "Últimas fotos públicas tiradas em {hotel}.", refresh: "Atualizar", noPhotosFeed: "Nenhuma foto", noPhotosFeedDesc: "A API não retornou fotos no momento.", authorUnavailable: "Autor indisponível", player: "jogador",
   nfTitle: "Bobba! Página não indexada.", nfDesc: "Este endereço não existe no Bobba Index.", nfBack: "Voltar à busca",

@@ -49,7 +49,7 @@ export const fi: Dict = {
   badgesTitle: "Merkkiselain",
   badgesDesc: "Nimet ja kuvaukset tulevat hotellin julkisista pelin teksteistä (gamedata). Luettelo listaa merkit, joilla on nimi — se ei takaa, että kaikki ovat olemassa tai saatavilla.",
   badgesSearch: "Hae merkkejä", badgesPlaceholder: "Nimi tai koodi, esim. ACH_", typeAll: "Kaikki", typeAch: "Saavutukset (ACH_)", typeOther: "Muut", codeType: "Koodityyppi",
-  countOf: "{a} / {b} merkkiä luettelossa", noBadgeFound: "Merkkejä ei löytynyt", noBadgeFoundDesc: "Kokeile toista nimeä tai koodia.",
+  countOf: "{a} / {b} merkkiä luettelossa", noBadgeFound: "Merkkejä ei löytynyt", noBadgeFoundDesc: "Kokeile toista nimeä tai koodia.", catalogSnapshot: "Luettelo {date}: Habbo hylkäsi päivityksen toistaiseksi.",
   prev: "Edellinen", next: "Seuraava", pageOf: "Sivu {a} / {b}", pagination: "Sivutus", code: "Koodi", owners: "Omistajat", players: "{n} pelaajaa", noDescReg: "Ei kuvausta.",
   photosTitle: "Yhteisön kuvat", photosSub: "Uusimmat julkiset kuvat hotellista {hotel}.", refresh: "Päivitä", noPhotosFeed: "Ei kuvia", noPhotosFeedDesc: "Rajapinta ei palauttanut kuvia juuri nyt.", authorUnavailable: "Tekijä ei saatavilla", player: "pelaaja",
   nfTitle: "Bobba! Sivua ei indeksoitu.", nfDesc: "Tätä osoitetta ei ole Bobba Indexissä.", nfBack: "Takaisin hakuun",

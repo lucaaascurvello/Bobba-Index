@@ -49,7 +49,7 @@ export const nl: Dict = {
   badgesTitle: "Badge-verkenner",
   badgesDesc: "Namen en beschrijvingen komen uit de openbare spelteksten (gamedata) van het hotel. De catalogus toont badges met een geregistreerde naam — geen garantie dat ze allemaal bestaan of beschikbaar zijn.",
   badgesSearch: "Badges zoeken", badgesPlaceholder: "Naam of code, bijv. ACH_", typeAll: "Alle", typeAch: "Prestaties (ACH_)", typeOther: "Overige", codeType: "Codetype",
-  countOf: "{a} van {b} badges in de catalogus", noBadgeFound: "Geen badges gevonden", noBadgeFoundDesc: "Probeer een andere naam of code.",
+  countOf: "{a} van {b} badges in de catalogus", noBadgeFound: "Geen badges gevonden", noBadgeFoundDesc: "Probeer een andere naam of code.", catalogSnapshot: "Catalogus van {date}: Habbo weigerde de update voorlopig.",
   prev: "Vorige", next: "Volgende", pageOf: "Pagina {a} van {b}", pagination: "Paginering", code: "Code", owners: "Eigenaren", players: "{n} spelers", noDescReg: "Geen beschrijving geregistreerd.",
   photosTitle: "Communityfoto's", photosSub: "Nieuwste openbare foto's uit {hotel}.", refresh: "Vernieuwen", noPhotosFeed: "Geen foto's", noPhotosFeedDesc: "De API gaf momenteel geen foto's.", authorUnavailable: "Auteur niet beschikbaar", player: "speler",
   nfTitle: "Bobba! Pagina niet geïndexeerd.", nfDesc: "Dit adres bestaat niet op Bobba Index.", nfBack: "Terug naar zoeken",

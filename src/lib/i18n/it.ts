@@ -49,7 +49,7 @@ export const it: Dict = {
   badgesTitle: "Esploratore di distintivi",
   badgesDesc: "Nomi e descrizioni provengono dai testi pubblici del gioco (gamedata) dell'hotel. Il catalogo elenca i distintivi con nome registrato — non garantisce che esistano tutti o siano disponibili.",
   badgesSearch: "Cerca distintivi", badgesPlaceholder: "Nome o codice, es.: ACH_", typeAll: "Tutti", typeAch: "Traguardi (ACH_)", typeOther: "Altri", codeType: "Tipo di codice",
-  countOf: "{a} di {b} distintivi nel catalogo", noBadgeFound: "Nessun distintivo trovato", noBadgeFoundDesc: "Prova un altro nome o codice.",
+  countOf: "{a} di {b} distintivi nel catalogo", noBadgeFound: "Nessun distintivo trovato", noBadgeFoundDesc: "Prova un altro nome o codice.", catalogSnapshot: "Catalogo del {date}: Habbo ha rifiutato l'aggiornamento per ora.",
   prev: "Precedente", next: "Successiva", pageOf: "Pagina {a} di {b}", pagination: "Paginazione", code: "Codice", owners: "Proprietari", players: "{n} giocatori", noDescReg: "Nessuna descrizione registrata.",
   photosTitle: "Foto della community", photosSub: "Ultime foto pubbliche scattate su {hotel}.", refresh: "Aggiorna", noPhotosFeed: "Nessuna foto", noPhotosFeedDesc: "L'API non ha restituito foto al momento.", authorUnavailable: "Autore non disponibile", player: "giocatore",
   nfTitle: "Bobba! Pagina non indicizzata.", nfDesc: "Questo indirizzo non esiste su Bobba Index.", nfBack: "Torna alla ricerca",

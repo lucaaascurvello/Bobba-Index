@@ -177,26 +177,66 @@ export function parseBadgeTexts(text: string): CatalogBadge[] {
     .sort((a, b) => a.code.localeCompare(b["code"]));
 }
 
-const catalogCache = new Map<string, { at: number; items: CatalogBadge[] }>();
+const catalogCache = new Map<string, { at: number; items: CatalogBadge[]; snapshotAt: string | null }>();
 const CATALOG_TTL = 6 * 60 * 60 * 1000;
 
-async function loadCatalog(hotel: string): Promise<ApiResult<CatalogBadge[]>> {
+/** Optional persistent last-good copy, used when the Habbo protection refuses the download. */
+export interface CatalogStore {
+  load(hotel: string): Promise<{ items: CatalogBadge[]; fetchedAt: string } | null>;
+  save(hotel: string, items: CatalogBadge[]): Promise<void>;
+}
+
+// A plain, non-browser identity: browser-like User-Agents and Origin headers get 463/403.
+export const CATALOG_HEADERS = { "User-Agent": "BobbaIndex/1.0", Accept: "text/plain" } as const;
+
+async function downloadCatalog(base: string): Promise<{ ok: true; text: string } | { ok: false; status: number | undefined }> {
+  let url = `${base}/gamedata/external_flash_texts/1`;
+  for (let hop = 0; hop < 3; hop++) {
+    let res: Response;
+    try {
+      res = await fetch(url, { headers: CATALOG_HEADERS, redirect: "manual", signal: AbortSignal.timeout(20000) });
+    } catch {
+      return { ok: false, status: undefined };
+    }
+    const loc = res.headers.get("location");
+    if (res.status >= 300 && res.status < 400 && loc) {
+      url = new URL(loc, url).toString();
+      continue;
+    }
+    if (!res.ok) return { ok: false, status: res.status };
+    return { ok: true, text: await res.text() };
+  }
+  return { ok: false, status: undefined };
+}
+
+async function loadCatalog(hotel: string, store?: CatalogStore): Promise<ApiResult<{ items: CatalogBadge[]; snapshotAt: string | null }>> {
   const base = hotelBase(hotel);
   if (!base.ok) return base;
   const cached = catalogCache.get(hotel);
-  if (cached && Date.now() - cached.at < CATALOG_TTL) return { ok: true, data: cached.items };
-  let res: Response;
-  try {
-    res = await fetch(`${base.data}/gamedata/external_flash_texts/1`, { signal: AbortSignal.timeout(20000) });
-  } catch {
-    return fail("network", "Não foi possível carregar o catálogo de emblemas.");
+  if (cached && Date.now() - cached.at < CATALOG_TTL) return { ok: true, data: cached };
+  let dl = await downloadCatalog(base.data);
+  if (!dl.ok && (dl.status === 463 || dl.status === 403)) {
+    await new Promise((r) => setTimeout(r, 800));
+    dl = await downloadCatalog(base.data);
   }
-  if (res.status === 429) return fail("rate_limited", "Limite de consultas atingido.", 429);
-  if (!res.ok) return fail(res.status === 463 || res.status === 403 ? "blocked" : "upstream", `Catálogo indisponível (${res.status}).`, res.status);
-  const items = parseBadgeTexts(await res.text());
-  if (items.length === 0) return fail("upstream", "O catálogo retornou vazio.");
-  catalogCache.set(hotel, { at: Date.now(), items });
-  return { ok: true, data: items };
+  if (dl.ok) {
+    const items = parseBadgeTexts(dl.text);
+    if (items.length > 0) {
+      catalogCache.set(hotel, { at: Date.now(), items, snapshotAt: null });
+      await store?.save(hotel, items).catch(() => undefined);
+      return { ok: true, data: { items, snapshotAt: null } };
+    }
+  }
+  const snap = await store?.load(hotel).catch(() => null);
+  if (snap && snap.items.length > 0) {
+    // Retry upstream sooner (30 min) while serving the stored copy.
+    catalogCache.set(hotel, { at: Date.now() - CATALOG_TTL + 30 * 60 * 1000, items: snap.items, snapshotAt: snap.fetchedAt });
+    return { ok: true, data: { items: snap.items, snapshotAt: snap.fetchedAt } };
+  }
+  if (dl.ok) return fail("upstream", "O catálogo retornou vazio.");
+  if (dl.status === undefined) return fail("network", "Não foi possível carregar o catálogo de emblemas.");
+  if (dl.status === 429) return fail("rate_limited", "Limite de consultas atingido.", 429);
+  return fail(dl.status === 463 || dl.status === 403 ? "blocked" : "upstream", `Catálogo indisponível (${dl.status}).`, dl.status);
 }
 
 export const BADGE_PREFIXES = ["ACH_"] as const;
@@ -204,11 +244,12 @@ export const BADGE_PREFIXES = ["ACH_"] as const;
 export async function searchBadgeCatalog(
   hotel: string,
   opts: { q: string; prefix: "all" | "ach" | "other"; page: number; pageSize: number },
+  store?: CatalogStore,
 ): Promise<ApiResult<BadgeCatalogPage>> {
-  const cat = await loadCatalog(hotel);
+  const cat = await loadCatalog(hotel, store);
   if (!cat.ok) return cat;
   const q = opts.q.trim().toLowerCase();
-  const filtered = cat.data.filter((b) => {
+  const filtered = cat.data.items.filter((b) => {
     const isAch = b["code"].startsWith("ACH_");
     if (opts.prefix === "ach" && !isAch) return false;
     if (opts.prefix === "other" && isAch) return false;
@@ -223,7 +264,8 @@ export async function searchBadgeCatalog(
       total: filtered.length,
       page: opts.page,
       pageSize: opts.pageSize,
-      catalogSize: cat.data.length,
+      catalogSize: cat.data.items.length,
+      snapshotAt: cat.data.snapshotAt,
     },
   };
 }
