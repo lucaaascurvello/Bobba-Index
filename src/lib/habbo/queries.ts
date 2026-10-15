@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { getPhotosFn, getProfileFn, getUserByNameFn, searchBadgesFn } from "./habbo.functions";
+import { getBadgeOwnersFn, getCommunityPhotosFn, getPhotosFn, getProfileFn, getUserByNameFn, searchBadgesFn } from "./habbo.functions";
 import type { ApiResult, HabboErrorInfo } from "./types";
 
 export class HabboError extends Error {
@@ -50,5 +50,21 @@ export const photosQuery = (hotel: string, uniqueId: string) =>
     queryKey: ["habbo", "photos", hotel, uniqueId],
     queryFn: async () => unwrap(await getPhotosFn({ data: { hotel, uniqueId } })),
     staleTime: 10 * 60_000,
+    retry,
+  });
+
+export const badgeOwnersQuery = (hotel: string, code: string) =>
+  queryOptions({
+    queryKey: ["badges", "owners", hotel, code],
+    queryFn: async () => unwrap(await getBadgeOwnersFn({ data: { hotel, code } })),
+    staleTime: 30 * 60_000,
+    retry,
+  });
+
+export const communityPhotosQuery = (hotel: string) =>
+  queryOptions({
+    queryKey: ["habbo", "community-photos", hotel],
+    queryFn: async () => unwrap(await getCommunityPhotosFn({ data: { hotel } })),
+    staleTime: 2 * 60_000,
     retry,
   });
