@@ -82,4 +82,16 @@ export const it: Dict = {
   aboutLocal: "Preferiti e ricerche restano sul dispositivo",
   aboutLocalText: "Preferiti e ricerche recenti sono salvati solo nell’archiviazione locale del browser. Non creiamo uno storico dei giocatori né recuperiamo vecchi motti, amici eliminati o look precedenti non forniti dall’API. Puoi rimuovere preferiti e cancellare ricerche dalla pagina di ricerca.",
 
+  devLabel: "Un progetto artigianale",
+  devHi: "Ciao, sono",
+  devRole: "Analista de Redes Sociais",
+  devBio: "Bobba Index è un progetto indipendente, sviluppato a scopo di studio e per offrire uno strumento di ricerca gratuito alla community di Habbo. Utilizza esclusivamente dati resi pubblici dall'API ufficiale di Habbo Hotel, senza accedere a informazioni private dei giocatori.",
+  devFindMe: "Dove trovarmi",
+  devCoffeeLabel: "Sostieni il progetto",
+  devCoffeeTitle: "Offrimi un caffè",
+  devCoffeeText: "Ti piace Bobba Index? Qualsiasi importo via Pix aiuta a mantenere il progetto sveglio e online.",
+  devCopyPix: "Copia il codice Pix",
+  devPixCopied: "Codice Pix copiato!",
+  devScanQr: "oppure scansiona il QR nell'app della banca",
+
 };

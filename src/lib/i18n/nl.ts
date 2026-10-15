@@ -82,4 +82,16 @@ export const nl: Dict = {
   aboutLocal: "Favorieten en zoekopdrachten blijven op je apparaat",
   aboutLocalText: "Favorieten en recente zoekopdrachten staan alleen in de lokale opslag van je browser. We bouwen geen spelersgeschiedenis en halen geen oude motto’s, verwijderde vrienden of eerdere outfits op die de API niet levert. Verwijder favorieten of wis zoekopdrachten op de zoekpagina.",
 
+  devLabel: "Een zelfgemaakt project",
+  devHi: "Hoi, ik ben",
+  devRole: "Analista de Redes Sociais",
+  devBio: "Bobba Index is een onafhankelijk project, ontwikkeld voor studie en om de Habbo-community een gratis zoektool te bieden. Het gebruikt uitsluitend publieke gegevens van de officiële Habbo Hotel-API en heeft geen toegang tot privégegevens van spelers.",
+  devFindMe: "Waar je me vindt",
+  devCoffeeLabel: "Steun het project",
+  devCoffeeTitle: "Trakteer me op een koffie",
+  devCoffeeText: "Waardeer je Bobba Index? Elk bedrag via Pix helpt het project wakker en online te houden.",
+  devCopyPix: "Kopieer de Pix-code",
+  devPixCopied: "Pix-code gekopieerd!",
+  devScanQr: "of scan de QR in je bankapp",
+
 };

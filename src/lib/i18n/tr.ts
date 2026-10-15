@@ -82,4 +82,16 @@ export const tr: Dict = {
   aboutLocal: "Favoriler ve aramalar cihazında kalır",
   aboutLocalText: "Favoriler ve son aramalar yalnızca tarayıcının yerel depolamasında saklanır. Oyuncu geçmişi oluşturmaz, API’nin sunmadığı eski mottoları, silinen arkadaşları veya önceki görünümleri geri getirmeyiz. Arama sayfasından favorileri kaldırabilir ve aramaları temizleyebilirsin.",
 
+  devLabel: "El yapımı bir proje",
+  devHi: "Merhaba, ben",
+  devRole: "Analista de Redes Sociais",
+  devBio: "Bobba Index, bağımsız bir projedir; eğitim amaçlı geliştirildi ve Habbo topluluğuna ücretsiz bir arama aracı sunmak için yapıldı. Yalnızca resmî Habbo Hotel API'si aracılığıyla herkese açık verileri kullanır ve oyuncuların özel bilgilerine erişmez.",
+  devFindMe: "Nerede bulabilirim",
+  devCoffeeLabel: "Projeyi destekle",
+  devCoffeeTitle: "Bir kahve ısmarla",
+  devCoffeeText: "Bobba Index'i beğendin mi? Pix ile gönderilen her tutar, projeyi ayakta ve çevrimiçi tutmaya yardım eder.",
+  devCopyPix: "Pix kodunu kopyala",
+  devPixCopied: "Pix kodu kopyalandı!",
+  devScanQr: "veya banka uygulamasında QR kodunu okut",
+
 };
