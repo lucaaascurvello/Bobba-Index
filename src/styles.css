@@ -199,6 +199,14 @@
   from { transform: translateX(-100%); }
   to { transform: translateX(100%); }
 }
+@keyframes bobba-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(-0.35deg); }
+}
+@keyframes bobba-halo {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.08); }
+}
 
 @utility animate-fade-up {
   animation: bobba-fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -212,6 +220,13 @@
 @utility animate-fill {
   transform-origin: left;
   animation: bobba-fill 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+@utility animate-float {
+  animation: bobba-float 9s ease-in-out infinite;
+}
+@utility animate-halo {
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--primary) 40%, transparent), transparent 72%);
+  animation: bobba-halo 11s ease-in-out infinite;
 }
 @utility stagger {
   & > * { animation: bobba-fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
