@@ -124,6 +124,84 @@ function AboutPage() {
         <li>{t("lim3")}</li>
         <li>{t("lim4")}</li>
       </ul>
+
+      <section className="mt-12 border-t border-border pt-10">
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+          <p className="font-pixel text-xs uppercase text-primary-soft">{t("devLabel")}</p>
+          <div className="mt-5 flex flex-col gap-6 sm:flex-row sm:items-start">
+            <img
+              src={lucasPhoto.url}
+              alt="Lucas Curvello"
+              width={480}
+              height={500}
+              className="h-32 w-32 shrink-0 rounded-2xl border border-border object-cover"
+              loading="lazy"
+            />
+            <div className="min-w-0">
+              <h2 className="font-display text-2xl font-semibold leading-snug sm:text-3xl">
+                {t("devHi")}{" "}
+                <span className="bg-gradient-to-r from-primary to-primary-soft bg-clip-text text-transparent">
+                  Lucas Curvello
+                </span>
+              </h2>
+              <p className="mt-1 font-display text-base font-semibold text-foreground/90">{t("devRole")}</p>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">{t("devBio")}</p>
+              <p className="font-pixel mt-5 text-[10px] uppercase tracking-widest text-muted-foreground/70">{t("devFindMe")}</p>
+              <div className="mt-2 flex flex-wrap gap-2.5">
+                <a
+                  href="https://www.linkedin.com/in/lucaascarvalho/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium transition-all duration-200 hover:border-primary/60 hover:shadow-[var(--shadow-glow)] active:scale-[0.97]"
+                >
+                  <Linkedin className="size-4 text-primary-soft" aria-hidden="true" />
+                  LinkedIn
+                </a>
+                <a
+                  href="https://github.com/lucaaascurvello"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium transition-all duration-200 hover:border-primary/60 hover:shadow-[var(--shadow-glow)] active:scale-[0.97]"
+                >
+                  <Github className="size-4 text-primary-soft" aria-hidden="true" />
+                  GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-border bg-card p-6 sm:p-8">
+          <div className="grid gap-6 sm:grid-cols-[168px_1fr] sm:items-center">
+            <img
+              src={qrPix.url}
+              alt={t("devCoffeeTitle")}
+              width={480}
+              height={480}
+              className="h-40 w-40 rounded-2xl border border-border bg-white p-1"
+              loading="lazy"
+            />
+            <div className="min-w-0">
+              <p className="font-pixel text-xs uppercase text-primary-soft">{t("devCoffeeLabel")}</p>
+              <h3 className="font-display mt-2 text-2xl font-semibold">
+                {t("devCoffeeTitle")} <span aria-hidden="true">☕</span>
+              </h3>
+              <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">{t("devCoffeeText")}</p>
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={copyPix}
+                  className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:shadow-[var(--shadow-glow)] active:scale-[0.97]"
+                >
+                  {copied ? <Check className="size-4" aria-hidden="true" /> : <Copy className="size-4" aria-hidden="true" />}
+                  {copied ? t("devPixCopied") : t("devCopyPix")}
+                </button>
+                <span className="text-xs text-muted-foreground/80">{t("devScanQr")}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
