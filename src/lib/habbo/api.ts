@@ -56,8 +56,9 @@ async function getJson(url: string): Promise<ApiResult<unknown>> {
 }
 
 function hotelBase(hotel: string): ApiResult<string> {
-  if (!isSupportedHotel(hotel)) return fail("unsupported_hotel", "Este hotel ainda não é suportado.");
-  return { ok: true, data: `https://${getHotel(hotel)!.domain}` };
+  const config = getHotel(hotel);
+  if (!config || !isSupportedHotel(hotel)) return fail("unsupported_hotel", "Este hotel está temporariamente indisponível. Selecione Habbo Brasil.");
+  return { ok: true, data: `https://${config.domain}` };
 }
 
 function mapBadge(b: Record<string, unknown>): HabboBadge {
@@ -180,10 +181,10 @@ const catalogCache = new Map<string, { at: number; items: CatalogBadge[] }>();
 const CATALOG_TTL = 6 * 60 * 60 * 1000;
 
 async function loadCatalog(hotel: string): Promise<ApiResult<CatalogBadge[]>> {
-  const cached = catalogCache.get(hotel);
-  if (cached && Date.now() - cached.at < CATALOG_TTL) return { ok: true, data: cached.items };
   const base = hotelBase(hotel);
   if (!base.ok) return base;
+  const cached = catalogCache.get(hotel);
+  if (cached && Date.now() - cached.at < CATALOG_TTL) return { ok: true, data: cached.items };
   let res: Response;
   try {
     res = await fetch(`${base.data}/gamedata/external_flash_texts/1`, { signal: AbortSignal.timeout(20000) });
