@@ -64,6 +64,22 @@ export const pt = {
   lim2: "Perfis privados mostram apenas avatar, missão e dados básicos.",
   lim3: "As consultas são feitas direto do seu navegador ao hotel escolhido; se falharem, tentamos pelo nosso servidor. A proteção do Habbo ainda pode recusar consultas ocasionalmente.",
   lim4: "O catálogo de emblemas não informa raridade, categorias ou data de lançamento.",
+  aboutPurpose: "Criado para aprender e compartilhar",
+  aboutCommunity: "O Bobba Index nasceu como um projeto independente, desenvolvido para fins de estudo e para oferecer aos jogadores uma ferramenta de consulta simples. Ferramentas desse tipo são procuradas e utilizadas pela comunidade para reencontrar jogadores, explorar perfis e conhecer coleções de emblemas. Nossa proposta é reunir essas informações públicas de forma clara, sem substituir o jogo.",
+  aboutHow: "Do nick ao perfil: como a pesquisa funciona",
+  aboutStep1Title: "Escolha o hotel",
+  aboutStep1: "Selecione a região no menu: a pesquisa será feita somente na base daquele hotel. Depois, informe o nick completo do jogador; letras maiúsculas e minúsculas não mudam o resultado.",
+  aboutStep2Title: "Consultamos a fonte pública",
+  aboutStep2: "A consulta é enviada à API pública do Habbo, normalmente pelo seu navegador. Se houver uma falha de conexão ou uma recusa, tentamos pelo servidor, sem contornar as proteções do hotel. Não fazemos varreduras de jogadores nem buscas parciais.",
+  aboutStep3Title: "Organizamos a resposta",
+  aboutStep3: "O perfil reúne apenas o que a API retornar: avatar, missão, registro, nível e outras informações públicas, quando disponíveis. Emblemas, amigos, grupos, quartos e fotos dependem da disponibilidade da fonte e das configurações de privacidade. Campos ausentes aparecem como indisponíveis; não inventamos dados.",
+  aboutHotels: "Um universo, diferentes hotéis",
+  aboutHotelsText: "Você pode pesquisar no Brasil, no hotel internacional (.com), na Espanha, Alemanha, França, Itália, Holanda, Finlândia e Turquia. Cada hotel tem sua própria base: o mesmo nick pode pertencer a pessoas diferentes em regiões distintas. Não existe uma busca global entre todos os hotéis. Ao trocar o hotel, a interface acompanha seu idioma principal; missões e outros conteúdos dos jogadores permanecem como foram publicados.",
+  aboutPrivacy: "Público não significa acesso a tudo",
+  aboutPrivacyText: "Exibimos somente os dados que o Habbo considera públicos e disponibiliza em sua API. Senhas, e-mails, mensagens privadas e informações sensíveis não são consultados nem expostos por esta ferramenta. Perfis privados e informações ocultas são respeitados: não contornamos essas restrições. Uma informação indisponível não significa necessariamente que ela não exista.",
+  aboutLocal: "Favoritos e buscas ficam no seu dispositivo",
+  aboutLocalText: "Favoritos e pesquisas recentes são salvos apenas no armazenamento local do seu navegador. Não criamos um banco de histórico dos jogadores nem recuperamos missões antigas, amigos excluídos ou visuais anteriores que a API não oferece. Você pode remover os favoritos ou limpar as buscas na página de pesquisa.",
+
 };
 
 export type Dict = typeof pt;
