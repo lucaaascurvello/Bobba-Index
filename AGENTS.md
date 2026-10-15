@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Architecture
+- Render the brand skull as unit SVG rectangles on a 9×9 grid with crispEdges and integer-multiple default dimensions; this preserves the supplied pixel geometry without bitmap scaling.
 - All Habbo API calls live in `src/lib/habbo/api.ts` (pure fetch + normalization) and are exposed via server functions in `habbo.functions.ts`; UI consumes them only through `queries.ts` — keeps one timeout/error policy and lets the big gamedata file be parsed server-side.
 - Server functions return `ApiResult` objects instead of throwing; `queries.ts` converts failures to `HabboError` so components can branch on `kind`.
 - Hotels are configured in `src/lib/habbo/hotels.ts`; only enable a hotel after its endpoints are validated.
