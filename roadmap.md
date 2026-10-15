@@ -17,6 +17,7 @@
 
 ## Efeito na ilustração do "Como funciona"
 - [x] Flutuação suave (sobe e desce ~10px) com brilho dourado respirando ao redor do desenho.
+- [x] Remover o brilho dourado (aura) da ilustração; manter só a flutuação suave.
 - [x] Verificar animação, console, sem overflow horizontal e testes.
 
 ## Espaçamento do rodapé
