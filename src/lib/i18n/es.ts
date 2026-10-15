@@ -49,7 +49,7 @@ export const es: Dict = {
   badgesTitle: "Explorador de placas",
   badgesDesc: "Los nombres y descripciones provienen de los textos públicos del juego (gamedata) del hotel. El catálogo lista placas con nombre registrado — no garantiza que todas existan o estén disponibles.",
   badgesSearch: "Buscar placas", badgesPlaceholder: "Nombre o código, ej.: ACH_", typeAll: "Todas", typeAch: "Logros (ACH_)", typeOther: "Otras", codeType: "Tipo de código",
-  countOf: "{a} de {b} placas en el catálogo", noBadgeFound: "Ninguna placa encontrada", noBadgeFoundDesc: "Prueba otro nombre o código.",
+  countOf: "{a} de {b} placas en el catálogo", noBadgeFound: "Ninguna placa encontrada", noBadgeFoundDesc: "Prueba otro nombre o código.", catalogSnapshot: "Catálogo del {date}: Habbo rechazó la actualización por ahora.",
   prev: "Anterior", next: "Siguiente", pageOf: "Página {a} de {b}", pagination: "Paginación", code: "Código", owners: "Dueños", players: "{n} jugadores", noDescReg: "Sin descripción registrada.",
   photosTitle: "Fotos de la comunidad", photosSub: "Últimas fotos públicas tomadas en {hotel}.", refresh: "Actualizar", noPhotosFeed: "Ninguna foto", noPhotosFeedDesc: "La API no devolvió fotos en este momento.", authorUnavailable: "Autor no disponible", player: "jugador",
   nfTitle: "¡Bobba! Página no indexada.", nfDesc: "Esta dirección no existe en Bobba Index.", nfBack: "Volver a la búsqueda",

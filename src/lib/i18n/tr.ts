@@ -49,7 +49,7 @@ export const tr: Dict = {
   badgesTitle: "Rozet gezgini",
   badgesDesc: "Adlar ve açıklamalar otelin açık oyun metinlerinden (gamedata) gelir. Katalog, kayıtlı adı olan rozetleri listeler — hepsinin var olduğunu veya mevcut olduğunu garanti etmez.",
   badgesSearch: "Rozet ara", badgesPlaceholder: "Ad veya kod, ör.: ACH_", typeAll: "Tümü", typeAch: "Başarılar (ACH_)", typeOther: "Diğerleri", codeType: "Kod türü",
-  countOf: "Katalogda {b} rozetten {a}", noBadgeFound: "Rozet bulunamadı", noBadgeFoundDesc: "Başka bir ad veya kod dene.",
+  countOf: "Katalogda {b} rozetten {a}", noBadgeFound: "Rozet bulunamadı", noBadgeFoundDesc: "Başka bir ad veya kod dene.", catalogSnapshot: "{date} tarihli katalog: Habbo güncellemeyi şimdilik reddetti.",
   prev: "Önceki", next: "Sonraki", pageOf: "Sayfa {a} / {b}", pagination: "Sayfalama", code: "Kod", owners: "Sahipler", players: "{n} oyuncu", noDescReg: "Kayıtlı açıklama yok.",
   photosTitle: "Topluluk fotoğrafları", photosSub: "{hotel} içinde çekilen en yeni açık fotoğraflar.", refresh: "Yenile", noPhotosFeed: "Fotoğraf yok", noPhotosFeedDesc: "API şu anda fotoğraf döndürmedi.", authorUnavailable: "Yazar mevcut değil", player: "oyuncu",
   nfTitle: "Bobba! Sayfa dizinlenmedi.", nfDesc: "Bu adres Bobba Index'te yok.", nfBack: "Aramaya dön",
