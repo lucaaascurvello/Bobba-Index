@@ -11,7 +11,7 @@ A proposta é desenvolver uma plataforma que permita consultar informações pú
 
 Mais do que uma ferramenta de consulta, o projeto busca unir tecnologia, experimentação e nostalgia em uma experiência desenvolvida para a comunidade.
 
-🔗 **Acesse:** [bobba-hub-explorer.lovable.app](https://bobba-index.lovable.app/)
+🔗 **Acesse:** (https://bobba-index.lovable.app/)
 
 ## 🚀 Funcionalidades
 
