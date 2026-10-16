@@ -11,7 +11,7 @@ A proposta é desenvolver uma plataforma que permita consultar informações pú
 
 Mais do que uma ferramenta de consulta, o projeto busca unir tecnologia, experimentação e nostalgia em uma experiência desenvolvida para a comunidade.
 
-🔗 **Acesse:** [bobba-hub-explorer.lovable.app](https://bobba-hub-explorer.lovable.app/)
+🔗 **Acesse:** [bobba-hub-explorer.lovable.app](https://bobba-index.lovable.app/)
 
 ## 🚀 Funcionalidades
 
@@ -88,6 +88,4 @@ Habbo e suas respectivas marcas e propriedades intelectuais pertencem aos seus t
 **Lucas Curvello**
 
 Projeto pessoal que une tecnologia, criatividade e experimentação para transformar ideias em ferramentas digitais.
-
-- 🚀 [Acessar o Bobba Index](https://bobba-hub-explorer.lovable.app/)
 
